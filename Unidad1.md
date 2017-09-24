@@ -20,21 +20,23 @@ Y claro está, puede verse al mundo en general, fuera del entorno del cómputo, 
 
 El camino por delante es largo, y puede resultar interesante y divertido.
 
-Funciones y objetivos del sistema operativo
+#Funciones y objetivos del sistema operativo
 
 El sistema operativo es el único programa que interactúa directamente con el hardware de la computadora. Sus funciones primarias son:
 
-Abstracción
+###**Abstracción**
 Los programas no deben tener que preocuparse de los detalles de acceso a hardware, o de la configuración particular de una computadora. El sistema operativo se encarga de proporcionar una serie de abstracciones para que los programadores puedan enfocarse en resolver las necesidades particulares de sus usuarios. Un ejemplo de tales abstracciones es que la información está organizada en archivos y directorios (en uno o muchos dispositivos de almacenamiento).
-Administración de recursos
+
+###Administración de recursos
 Una sistema de cómputo puede tener a su disposición una gran cantidad de recursos (memoria, espacio de almacenamiento, tiempo de procesamiento, etc.), y los diferentes procesos que se ejecuten en él compiten por ellos. Al gestionar toda la asignación de recursos, el sistema operativo puede implementar políticas que los asignen de forma efectiva y acorde a las necesidades establecidas para dicho sistema.
-Aislamiento
+
+###Aislamiento
 En un sistema multiusuario y multitarea cada proceso y cada usuario no tendrá que preocuparse por otros que estén usando el mismo sistema —Idealmente, su experiencia será la misma que si el sistema estuviera exclusivamente dedicado a su atención (aunque fuera un sistema menos poderoso).
 Para implementar correctamente las funciones de aislamiento hace falta que el sistema operativo utilice hardware específico para dicha protección.
 
-Evolución de los sistemas operativos
+#Evolución de los sistemas operativos
 
-No se puede comenzar a abordar el tema de los sistemas operativos sin revisar brevemente su desarrollo histórico. Esto no sólo permitirá comprender por qué fueron apareciendo determinadas características y patrones de diseño que se siguen empleando décadas más tarde, sino (como resulta particularmente bien ejemplificado en el discurso de recepción del premio Turing de Fernando Corbató, Acerca de la construcción de sistemas que fallarán, \parencite{Corbato90}), adecuar un sistema a un entorno cambiante, por mejor diseñado que éste estuviera, lleva casi inevitablemente a abrir espacios de comportamiento no previsto —el espacio más propicio para que florezcan los fallos. Conocer los factores que motivaron a los distintos desarrollos puede ayudar a prever y prevenir problemas.
+No se puede comenzar a abordar el tema de los sistemas operativos sin revisar brevemente su desarrollo histórico. Esto no sólo permitirá comprender por qué fueron apareciendo determinadas características y patrones de diseño que se siguen empleando décadas más tarde, sino (como resulta particularmente bien ejemplificado en el discurso de recepción del premio Turing de Fernando Corbató, Acerca de la construcción de sistemas que fallarán, \parencite{Corbato90}), adecuar un sistema a un entorno cambiante, por mejor diseñado que éste estuviera, lleva casi inevitablemente a abrir ****espacios de comportamiento no previsto —el espacio más propicio para que florezcan los fallos. Conocer los factores que motivaron a los distintos desarrollos puede ayudar a prever y prevenir problemas.
 
 Proceso por lotes (batch processing)
 
@@ -87,13 +89,13 @@ Y del lado de las computadoras personales
 
 Si bien la discusión hasta este momento asume una computadora central con operadores dedicados y múltiples usuarios, en la década de los setenta comenzaron a aparecer las computadoras personales, sistemas en un inicio verdaderamente reducidos en prestaciones y a un nivel de precios que los ponían al alcance, primero, de los aficionados entusiastas y, posteriormente, de cualquiera.
 
-Primeros sistemas para entusiastas
+#Primeros sistemas para entusiastas
 
-./img/altair.jpg
 
-Las primeras computadoras personales eran distribuidas sin sistemas operativos o lenguajes de programación; la interfaz primaria para programarlas era mediante llaves (switches), y para recibir sus resultados, se utilizaban bancos de
+Las primeras computadoras personales eran distribuidas sin sistemas operativos o lenguajes de programación; la interfaz primaria para programarlas era mediante llaves (switches), y para recibir sus resultados, se utilizaban bancos de leds.
 
-leds.
+![](https://github.com/gwolf/sistop/blob/master/img/altair.jpg?raw=true)
+
 Claro está, esto requería conocimientos especializados, y las computadoras personales eran aún vistas sólo como juguetes caros.
 
 La revolución de los 8 bits
