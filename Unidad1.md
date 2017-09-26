@@ -1,4 +1,4 @@
-#¿Qué es un sistema operativo?
+# ¿Qué es un sistema operativo?
 
 El sistema operativo es el principal programa que se ejecuta en toda computadora de propósito general.
 
@@ -6,7 +6,7 @@ Los hay de todo tipo, desde muy simples hasta terriblemente complejos, y entre m
 
 A lo largo del presente texto, no se hace referencia al sistema operativo como lo ve o usa el usuario final, o como lo vende la mercadotecnia — el ambiente gráfico, los programas que se ejecutan en éste, los lenguajes de programación en los cuales están desarrollados y en que más fácilmente se puede desarrollar para ellos, e incluso el conjunto básico de funciones que las bibliotecas base ofrecen son principalmente clientes del sistema operativo — se ejecutan sobre él, y ofrecen sus interfaces a los usuarios (incluidos, claro, los desarrolladores). La diferencia en el uso son sólo –cuando mucho– consecuencias del diseño de un sistema operativo. Más aún, con el mismo sistema operativo –como pueden constatarlo comparando dos distribuciones de Linux, o incluso la forma de trabajo de dos usuarios en la misma computadora– es posible tener entornos operativos completamente disímiles.
 
-##¿Por qué estudiar los sistemas operativos?
+## ¿Por qué estudiar los sistemas operativos?
 
 La importancia de estudiar este tema radica no sólo en comprender los mecanismos que emplean los sistemas operativos para cumplir sus tareas sino en entenderlos para evitar los errores más comunes al programar, que pueden resultar desde un rendimiento deficiente hasta pérdida de información.
 
