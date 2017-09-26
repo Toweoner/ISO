@@ -77,3 +77,8 @@
 * **Fundamentos de Sistemas Operativos**. *Gunnar Wolf y Otros*. Creative Commons.
 * **MCSA MS Windows**. Ediciones Eni.
 * **LPIC-1 Linux**. Ediciones Eni.
+
+
+# INFORME CERTIFICACIONES
+
+http://certmag.com/salary-survey-2016-annual-salary-survey/
