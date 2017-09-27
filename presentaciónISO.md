@@ -54,13 +54,13 @@
 * X Window
 * Particionamiento avanzado: RAID, LVM y BTRFS
 
-
+# Unidad 6: Monitorización, Eficiencia y Gestión de Incidencias en IT.
 
 # Temporización de Unidades
 
 * U1 y U2: PRIMER TRIMESTRE
 * U3 Y U4: SEGUNDO TRIMESTRE (3er Trimestre)
-* U5: TERCER TRIMESTRE
+* U5 (y U6): TERCER TRIMESTRE
 
 # SESIONES ORIENTATIVAS POR Unidad
 
@@ -77,7 +77,7 @@
 * **Fundamentos de Sistemas Operativos**. *Gunnar Wolf y Otros*. Creative Commons.
 * **MCSA MS Windows**. Ediciones Eni.
 * **LPIC-1 Linux**. Ediciones Eni.
-
+* **GLPI**. Ediciones Eni. (ITIL v3)
 
 # INFORME CERTIFICACIONES
 
