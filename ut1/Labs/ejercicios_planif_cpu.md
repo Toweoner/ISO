@@ -23,5 +23,12 @@
 |    D    | 8   | 6  |     |      |      |    |
 |    E    | 12  | 2  |     |      |      |    |
 
-hola
- 
+3. Realiza lo mismo con los siguientes procesos:
+
+| Proceso | Tll | Ts | Tin | Tfin | Ttat | Tr |
+|---------|-----|----|-----|------|------|----|
+|    A    | 0   | 3  |     |      |      |    |
+|    B    | 1   | 5  |     |      |      |    |
+|    C    | 3   | 2  |     |      |      |    |
+|    D    | 9   | 5  |     |      |      |    |
+|    E    | 12  | 5  |     |      |      |    |
