@@ -1,14 +1,14 @@
 1. Asumiendo los siguientes procesos:
 
 
-| Proceso | Tll | Ts | Tin | Tfin | Ttat | Tr |
-|---------|-----|----|-----|------|------|----|
-|    A    | 0   | 8 |     |      |      |    |
-|    B    | 2   | 13  |     |      |      |    |
-|    C    | 4   | 3  |     |      |      |    |
-|    D    | 4   | 6  |     |      |      |    |
-|    E    | 6  | 8  |     |      |      |    |
-|    F    | 6  | 3  |     |      |      |    | |
+| Proceso | Tll | Ts | Prioridad |
+|---------|-----|----|-----|------|
+|    A    | 0   | 8 |   1  |      |    
+|    B    | 2   | 13  |  2   |      |    
+|    C    | 4   | 3  |   3  |      |      |    |
+|    D    | 4   | 6  |   4  |      |      |    |
+|    E    | 6  | 8  |   5  |      |      |    |
+|    F    | 6  | 3  |   6  |      |      |    | |
 
 * Desarrolle la representación gráfica de cómo el despachador les asignaría
 el CPU, y la tabla de análisis, bajo:
