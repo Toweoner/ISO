@@ -26,4 +26,12 @@ Compare el rendimiento, uso del procesador, media de tiempo de retorno, respuest
 
 * Debes explicar qué tipos de algoritmos se utilizan para cada uno de estos sistemas y explicarlos.
 
-* Referencias: <https://en.wikipedia.org/wiki/Scheduling_(computing)#Windows>
+* Haz un estudio de cuál es la forma de configurar las planificaciones de CPU para Windows y Linux.
+
+## Referencias:
+* <https://en.wikipedia.org/wiki/Scheduling_(computing)#Windows>
+
+* <http://recoverymonkey.org/2007/08/17/processor-scheduling-and-quanta-in-windows-and-a-bit-about-unixlinux/>
+* <https://www.microsoft.com/mspress/books/sampchap/4354c.aspx>
+* <https://technet.microsoft.com/library/Cc976120>
+*
