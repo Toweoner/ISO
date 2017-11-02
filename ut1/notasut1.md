@@ -5,7 +5,7 @@
 
 # Anotaciones sobre las partes de ISO para el exmanen UT1:
 
-## Para las partes de teoría, estas son las indicaciones de las partes que se han visto.
+## Para la parte de teoría del examen, estas son las indicaciones de las partes 1 a la 4 que se han visto.
 
 ### Parte 1
 
@@ -30,6 +30,6 @@
 
 ## Para la parte práctica del examen
 
-* Fundamentalmente será realizar un estudio de planificación de varios algoritmos, calculando la tabla de tiempos, el throughput, Tiempo de Cpu, etc. 
+* Fundamentalmente será realizar un estudio de planificación de varios algoritmos, calculando la tabla de tiempos, el throughput, Tiempo de Cpu, etc.
 
 * Puede que haya alguna pregunta sobre los Labs 1.1 y 1.2
