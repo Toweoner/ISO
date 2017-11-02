@@ -30,6 +30,6 @@
 
 ## Para la parte práctica del examen
 
-* Fundamentalmente será realizar un estudio de planificación de varios algoritmos, calculando la tabla de tiempos, el throughput, Tiempo de Cpu, etc.
+* Fundamentalmente será realizar un estudio de planificación de varios algoritmos, calculando la tabla de tiempos, el throughput, Tiempo de Cpu, etc. Sin prioridades.
 
 * Puede que haya alguna pregunta sobre los Labs 1.1 y 1.2
