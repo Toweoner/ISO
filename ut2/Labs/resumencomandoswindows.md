@@ -1,5 +1,6 @@
 # Basic Command Prompt Commands
 
+```
 x /? = provides syntax info and complete list of all parameters for x (a command, like “cd”)
 cd = change directory
 cd .. = move to the parent directory
@@ -35,26 +36,33 @@ ren x y = rename file x to y
 time = change the time
 type file = display the contents of the file ‘file’ (displays file contents in console)
 type file |more = display the contents one line at a time
+```
 
 # Advanced Command Prompt Commands
-
+```
 ipconfig [/all] = display network adapter information (advanced)
 netstat –n = display local address and addresses you are connected to (advanced)
 netstat –nb = above with name of foreign addresses (advanced) (this shows your private IP, if you are behind a router or proxy, then your public IP address will be different)
 ping google.com = how long it takes for your computer to talk to google.com
 **
+```
 
 ## Convert output of one process into the input of another process
+```
 Send contents of script.js to the system debug.exe file:
 type script.js | c:\programs]debug.exe
 programs\debug.exe < script.js
+```
 
 ## Send directory listing to a printer or file
+```
 dir > prn (theoretically to a printer)
 dir > somefile.txt
 dir *.mp3 > c:\Users\Dan\Desktop\musiclist.txt = print all .mp3 files in current directory to musiclist.txt
+```
 
 ## Customize the DOS command prompt
+```
 prompt /? = display prompt options
 prompt $p$g = display current directory followed by a greater-than symbol (Windows default)
 prompt $p$g$t = display time after the default prompt
@@ -79,22 +87,12 @@ c = bright red
 d = bright magenta
 e = bright yellow
 f = bright white
+```
 
-## Modify any file extension associations
-[assoc .extension=fileType]
-assoc /? = prints this information
-assoc = display list of current file extensions recognized by your computer (any fileType value may be used)
-assoc > fileextensions.txt = print list to somefile.txt in current directory
-assoc .txt = displays current file association of .txt (.docx, .html, .zip, .htaccess, assoc textfile, et cetera)
-assoc .txt= = will delete the association for the given file extension
 
-## File Extension Tips/Ideas:
-- Windows by default doesn’t know the following extensions, but check anyways with “assoc .”, “assoc .htaccess” and “assoc .xml” anyways just to be sure. If the extension is defined already, then you may not need to change it.
-assoc .=txtfile = associate extensionless files with Notepad
-assoc .htaccess=txtfile = associate nameless .htaccess files with Notepad
-assoc .xml=txtfile = associate XML files with Notepad
 
 ## Miscellaneous
+```
 Acceptable characters: A-Z a-z 0-9 $ # & @ ! ( ) – { } ‘ ` _ ~
 Unacceptable characters: | < > \ ^ + = ? / [ ] ” ; , * : %
 
@@ -105,10 +103,12 @@ Unacceptable characters: | < > \ ^ + = ? / [ ] ” ; , * : %
 < = directs data from a file or device to a program or device
 « = directs additional data from a file or device to a program or device
 nul = black hole
+```
 
-##Environmental Variables via the DOS command prompt
+## Environmental Variables via the DOS command prompt
 
-##System-generated upon Windows startup:
+### System-generated upon Windows startup:
+```
 %DATE% = Tue 08/02/2011
 %TIME% = 14:23:33.37
 %SYSTEMROOT% = C:\Windows
@@ -121,9 +121,9 @@ Local machine variables for all users:
 %HOMEPATH% = \Users\Dan
 %HOMEDRIVE% = C:
 (Hint: Use echo)
-
+```
 ## Function Keys
-
+```
 F1 = Sequential, individual repeat of previously entered characters
 F2 = Copies any number of characters from the previous command line
 F3 = Repeats the contents of the previous command line
@@ -133,3 +133,4 @@ F6 = Enters the characters ^z (CTRL+z), indicating “end of file”
 F7 = Displays a history of command-line entries for the current session (50-line cache)
 F8 = Sequentially displays previous command-line entries
 F9 = Enables user to recall previous command lines by number (0 = first line)
+```
