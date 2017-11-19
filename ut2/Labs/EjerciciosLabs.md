@@ -1,10 +1,8 @@
 # Ejercicios de Labs
 
-## Los siguientes ejercicios se realizarán en clase.
-
-* Se utilizará un VM de Windows 10 Enterprise
+* Los siguientes ejercicios se realizarán en clase. A modo de guión se pondrán aquí todos los procesos para que los alumnos puedan consultar los conocimientos de forma más sencilla.
+* Se utilizará un VM de Windows 10 Enterprise como base.
 * Es necesaria una ISO de la W10 Ent y una iso de debian.
-* Dichos ejercicios se realizarán en clase
 * Al final se hará un lab de repaso general si hay tiempo.
 
 
@@ -22,11 +20,12 @@ Client Hyper-V  permite ejecutar máquinas virtuales con Windows 10. Hay varias 
 
   - Básicamente es como un VMWare Workstation o un Oracle VM, pero en su versión Microsoft.
 
-### Instalación del rol de Client Hyper-V
+ **Instalación del rol de Client Hyper-V**
 
 * Abra el Panel de control, haga clic en Programas y características, y luego haga clic en Activar o desactivar las características de Windows.
 
 * Seleccione la casilla de verificación de Hyper-V y haga clic en Aceptar. Los archivos se copian Debe reiniciar su computadora antes de poder administrar la máquina virtual.
+
 * También puede usar el siguiente cmdlet de Windows PowerShell para instalar la función Hyper-V:
 
 ```
@@ -35,7 +34,7 @@ Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
 * Ahora se está preparado para configurar MVs
 
 
-### Ejercicio 2. Instalar una iso en VHD de Hyper-V y en VMWARE.
+### Ejercicio 2. Instalar una iso en VHD en VMWARE.
 
 * Crear y configurar un VHD de arranque nativo
 * Crear y configurar un VHD de arranque nativo
@@ -87,7 +86,80 @@ Para instalar Windows dentro de su archivo VHD, siga estos pasos.
 
 5. En DiskPart, escriba List disk .
 
-6. Ubique el disco VHD que ha creado y escriba select vdisk file = D: \ VHD \ Windows10vhd.vhd . (Tenga en cuenta que la letra de la unidad ha sido modificada).
+6. Ubique el disco VHD que ha creado y escriba
+
+**Resumiendo comandos:**
+
+* Creación de un disco virtual VHD/VHDX: el siguiente ejemplo crea de forma dinámica un disco expandible de tipo VHD en un fichero llamado ```test.vhd```. El tipo puede ser ```expandible``` y ```fixed```. El primero se puede modificar y el segundo no y además es el valor por defecto.
+
+
+```
+create vdisk file=c:\test.vhd maximum=20000 type=expandable
+```
+
+* Montaje de VHD/VHDX (attach): el siguiente ejemplo muestra cómo seleccionar y montar el VHD. También se ven los pasos del particionamiento, formato y asiganción de letra de la unidad al disco montado.
+
+
+```
+select vdisk file=c:\test.vhd
+attach vdisk
+create partition primary
+format fs=ntfs label="Test VHD" quick
+assign letter=v
+```
+
+* Desmontaje de disco VHD
+
+
+```
+select vdisk file=c:\test.vhd
+detach vdisk
+```
+**Estos pasos se pueden realizar en el Administrador de Discos de la MMC**
+
+**También es necesario realizarlo mediante el comando diskpart en el CMD de Windows***
+
+
+
+```
+c:\DiskPart
+diskpart>
+```
+
+
+* Esto creará un disco VHD hijo (testdiff.vhd) del padre VHD (test.vhd) que existe previamente y que no será modificado.
+* Esto es útil cuando se tiene una imagen en el padre que no quieres que se modifique. Cuando se quiera volver a la imagen anterior
+This will create a differencing "child" VHD (testdiff.vhd) so that the existing parent VHD (test.vhd) is not modified.  Useful when you have an image on the parent VHD that you don’t want modified.  When needing to go back to the default image, only the differencing VHD would need to be replaced.  The differencing VHD typically starts out very small – usually less than a megabyte.  
+
+As a result, it is easy to back up and replace.
+
+```
+create vdisk file=c:\testdiff.vhd parent=c:\test.vhd
+```
+
+```
+expand vdisk maximum=<size in mb>
+```
+
+– This expands the maximum size on a VHD.  For this to work, the virtual disk must already be selected, detached and be a non-differencing VHD.  In addition, if you do have a differencing VHD and expand the parent VHD, you will need to create a new differencing VHD.  Otherwise you will encounter a VHD corruption error when trying to select/manage the differencing VHD.
+
+```
+merge vdisk depth=1
+```
+
+– Merges a child VHD with its parent.  This command can be used to merge one or more differencing ("child") VHDs with its corresponding parent VHD.
+
+```
+compact vdisk
+```
+
+– Compacts a selected VHD to reduce the physical size.  Can only be used on VHDs that are type expandable and are either detached, or attached as read only.
+
+```
+select vdisk file = D:\VHD\Windows10vhd.vhd .
+```
+
+(Tenga en cuenta que la letra de la unidad ha sido modificada).
 
 7. En DiskPart, escriba attach vdisk y presione Enter.
 
@@ -111,60 +183,3 @@ Después de reiniciar la máquina, debería ver la posibilidad de elegir un sist
 * Create and configure virtual hard disks
 * Create and configure Storage Spaces
 * Configure removable devices
-
-
-* Creating a VHD
-The example below creates a 20GB dynamically expanding VHD called "test.vhd" and places it in the root of the C: drive.  Note that the type parameter is optional and the default type is fixed.
-
-```
-create vdisk file=c:\test.vhd maximum=20000 type=expandable
-```
-
-* Attaching a VHD
-The following example shows how to select and attach the VHD.  It also provides steps for partitioning, formatting and assigning a drive letter to the attached VHD.
-
-```
-select vdisk file=c:\test.vhd
-attach vdisk
-create partition primary
-format fs=ntfs label="Test VHD" quick
-assign letter=v
-```
-
-* Detaching the VHD
-To detach (i.e. unmount) the VHD, use the following example:
-
-```
-select vdisk file=c:\test.vhd
-detach vdisk
-```
-
-Note: All 3 of these VHD actions can also be performed in the Disk Management Console of Windows 7.
-
-In addition, below are some other DiskPart commands that can be used to manage VHDs:
-
-```
-create vdisk file=c:\testdiff.vhd parent=c:\test.vhd
-```
-
-– This will create a differencing "child" VHD (testdiff.vhd) so that the existing parent VHD (test.vhd) is not modified.  Useful when you have an image on the parent VHD that you don’t want modified.  When needing to go back to the default image, only the differencing VHD would need to be replaced.  The differencing VHD typically starts out very small – usually less than a megabyte.  
-
-As a result, it is easy to back up and replace.
-
-```
-expand vdisk maximum=<size in mb>
-```
-
-– This expands the maximum size on a VHD.  For this to work, the virtual disk must already be selected, detached and be a non-differencing VHD.  In addition, if you do have a differencing VHD and expand the parent VHD, you will need to create a new differencing VHD.  Otherwise you will encounter a VHD corruption error when trying to select/manage the differencing VHD.
-
-```
-merge vdisk depth=1
-```
-
-– Merges a child VHD with its parent.  This command can be used to merge one or more differencing ("child") VHDs with its corresponding parent VHD.
-
-```
-compact vdisk
-```
-
-– Compacts a selected VHD to reduce the physical size.  Can only be used on VHDs that are type expandable and are either detached, or attached as read only.
