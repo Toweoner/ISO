@@ -175,7 +175,9 @@ Después de reiniciar la máquina, debería ver la posibilidad de elegir un sist
 
 ### Ejercicio 3. Modifcar arranque con BCDEDIT
 
-<https://www.computerhope.com/bcdedit.htm>
+
+* Realiz
+
 ### Ejercicio 4. Preparar un USB con diskpart para instalación.
 
 ### Ejercicio 5. Gestión discos:
