@@ -6,6 +6,11 @@
 * Se utilizará un VM de Windows 10 Enterprise como base.
 * Es necesaria una ISO de la W10 Ent y una iso de debian.
 * Al final se hará un lab de repaso general si hay tiempo.
+* Para el examen de la Unidad 2, será práctico y se partirá de una Windows 10 Enterprise limpia, a lo sumo con las VMware tools instaladas.
+* En el examen se pedirá una serie de comandos y acciones basados en los siguientes ejercicios.
+* Se entregará una parte de papel y otra digital con capturas.
+* No habrá conexión a internet.
+* La ayuda del sistema será el único material, además de la propia MV.
 
 
 
@@ -231,21 +236,27 @@ bcdedit /default {cbd971bf-b7b8-4885-951a-fa03044f5d71}
 
 ### Ejercicio 4. Preparar un USB con diskpart para instalación.
 
-select disk x (Replace X with your USB flash drive number, we are using 2 in this example)
+- Reemplaza x por la unidad de la unidad Flash USB:
 
-clean - This wipes the drive
+```select disk x ```
 
-create partition primary- Creates partition
+```clean # Esto elimina o limpia el contenido de la unidad Flash```
 
-select partiion 1- Selects partition 1
+```
+create partition primary  # Creamos una partición
 
-ative- Marks the current partition as active
+list partition 			  # Listamos la partición
 
-format gs=ntfs quick - This formats the partition
+select partition 1  	  # Seleccionamos la partición 1
 
-assign letter=H - Assigns a drive letter.
+ative 					  # Marcamos la actual partición como activa
+
+format gs=ntfs quick 	  # Formateamos la partición
+
+assign letter=H           # Asignamos la letra H, si sólo escribimos assign el sistema asigna una libre.
 
 exit
+```
 
 Luego entramos en la unidad g:
 
