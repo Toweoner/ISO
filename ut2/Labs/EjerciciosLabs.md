@@ -241,12 +241,31 @@ select partiion 1- Selects partition 1
 
 ative- Marks the current partition as active
 
-format FS=NTFS QUICK - This formats the partition
+format gs=ntfs quick - This formats the partition
 
 assign letter=H - Assigns a drive letter.
 
 exit
 
+Luego entramos en la unidad g:
+
+```
+g:
+cd boot
+bootsect /nt60 h:   # donde h: es la unidad del pendrive
+
+```
+
+- Copiamos los ficheros:
+
+```
+g:\xcopy g:\*.* /s /h /f h:\
+```
+
+
+- Una vez hecho esto, ya tenemos cualquier sistema Windows arrancable desde Flash USB.
+
+- Existe otra opción, que es utilizar **Rufus**, una aplicación que vale para casi cualquier sistema operativo. Pero es gráfica.
 ### Ejercicio 5. Gestión discos:
 
 #### Particiones MBR y GPT
