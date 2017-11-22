@@ -1,9 +1,12 @@
+
 # Ejercicios de Labs
 
 * Los siguientes ejercicios se realizarán en clase. A modo de guión se pondrán aquí todos los procesos para que los alumnos puedan consultar los conocimientos de forma más sencilla.
+* En los pdfs en **Contenidos** se muestran varias capitulos que, a modo de extensión, podéis consultarlos porque es un libro bastante interesante y el que se usa para la **certificación MCSA**.
 * Se utilizará un VM de Windows 10 Enterprise como base.
 * Es necesaria una ISO de la W10 Ent y una iso de debian.
 * Al final se hará un lab de repaso general si hay tiempo.
+
 
 
 ### Ejercicio 1. Activar la característica Hyper-V
@@ -119,43 +122,32 @@ detach vdisk
 
 **También es necesario realizarlo mediante el comando diskpart en el CMD de Windows***
 
-
-
 ```
 c:\DiskPart
 diskpart>
 ```
 
 
-* Esto creará un disco VHD hijo (testdiff.vhd) del padre VHD (test.vhd) que existe previamente y que no será modificado.
-* Esto es útil cuando se tiene una imagen en el padre que no quieres que se modifique. Cuando se quiera volver a la imagen anterior
-This will create a differencing "child" VHD (testdiff.vhd) so that the existing parent VHD (test.vhd) is not modified.  Useful when you have an image on the parent VHD that you don’t want modified.  When needing to go back to the default image, only the differencing VHD would need to be replaced.  The differencing VHD typically starts out very small – usually less than a megabyte.  
-
-As a result, it is easy to back up and replace.
-
-```
-create vdisk file=c:\testdiff.vhd parent=c:\test.vhd
-```
-
+- Este comando expande o extiende el tamaño del disco duro virtual VHD. Para que esto funcione el disco debe estar seleccionado, desmontado (detach) y no direfenciado (que no tenga un backup hijo, que no hemos visto). De otro modo, encontrarás errores de corrupción de datos en VHD. mientras lo intentes crear.
 ```
 expand vdisk maximum=<size in mb>
 ```
 
-– This expands the maximum size on a VHD.  For this to work, the virtual disk must already be selected, detached and be a non-differencing VHD.  In addition, if you do have a differencing VHD and expand the parent VHD, you will need to create a new differencing VHD.  Otherwise you will encounter a VHD corruption error when trying to select/manage the differencing VHD.
 
-```
-merge vdisk depth=1
-```
-
-– Merges a child VHD with its parent.  This command can be used to merge one or more differencing ("child") VHDs with its corresponding parent VHD.
+- Compacta un disco VHD seleccionado para reducir el tamaño. Sólo puede ser utilizado con VHDs que son *expandable* y también desmontados, o montados en modo lectura.
 
 ```
 compact vdisk
 ```
 
-– Compacts a selected VHD to reduce the physical size.  Can only be used on VHDs that are type expandable and are either detached, or attached as read only.
+* Después de poder crearlo debe reiniciar el sistema de modo que la BIOS/UEFI pueda reconocer una ISO de Windows 10 Enterprise desde un dispositivo extraíble. 
+* Desde la VMWARE, se para la máquina (Power Off) y se arranca desde la BIOS: Power On Firmware.
+* Se seleccion las opciones de arranque el dispositivo extraíble donde esté la ISO y se inicia la MV.
+* Después, en el arranque de instalación de Windows 10, se procede a la instalación y se pasa a la fase donde están los discos para instalar. Se pulsa ```Shift+F10```  t aparcerá la consola de comandos. 
+* Pasa a la unidad donde estén los discos virtuales y entre en la aplicación ```Diskpart```.
 
 ```
+
 select vdisk file = D:\VHD\Windows10vhd.vhd .
 ```
 
@@ -173,15 +165,121 @@ Su disco VHD debería aparecer ahora.
 
 Después de reiniciar la máquina, debería ver la posibilidad de elegir un sistema operativo durante el tiempo de arranque, como se muestra
 
+
 ### Ejercicio 3. Modifcar arranque con BCDEDIT
 
 
-* Realiz
+* El comando **BCDEDIT** tiene como función modificar el arranque de sistemas Windows. 
+* Se necesita iniciar el CMD con privilegios de Administrador.
+
+- Para visualizar la ayuda del comando:
+
+```
+bcdedit /?
+```
+
+- Para visualizar todas las entradas del boot manager:
+
+```
+bcdedit /v
+```
+
+- Para ver la ayuda de la opción */createstore*:
+
+
+```
+bcdedit /? /createstore
+```
+
+- El siguiente comando crea un orden que consiste en dos Windows, identificado por GUID y por la etiqueta ntldr, que la utilizan sistemas operativos Windows más antiguos que Vista
+:
+
+```
+bcdedit /displayorder {802d5e32-0784-11da-bd33-000476eba25f} {cbd971bf-b7b8-4885-951a-fa03044f5d71} {ntldr}
+```
+
+
+- El siguiente comando pasa el GUID que tenga la instalación del Windows al último lugar. También puede ser al primer lugar.
+
+
+```
+bcdedit /displayorder {802d5e32-0784-11da-bd33-000476eba25f} /addlast
+
+bcdedit /displayorder {802d5e32-0784-11da-bd33-000476eba25f} /addfirst
+```
+
+- Si se necesita cambiar la descripción que se va a imprimir en el boot manager al iniciar Windows:
+
+```
+bcdedit /set {802d5e32-0784-11da-bd33-000476eba25f} description "Windows 10 Lab1"
+```
+
+- Si queremos poner un tiempo en el que permanecerá disponible las opciones del boot manager (en segundos):
+
+
+```
+bcdedit /timeout 30
+```
+
+- Si queremos poner por defecto que arranque un determinado sistema:
+
+```
+bcdedit /default {cbd971bf-b7b8-4885-951a-fa03044f5d71}
+```
+
+* **BCDEDIT** no es un boot manager para sistemas Linux y, en principio, no es compatible, pero sí que se puede utilizar haciendo un simple workarround que añade un arranque UEFI desde una partición que se pueda acceder a la imagen de Linux. Aunque es recomendable utilizar **Grub2** cuando ya se tienen sistemas Windows y Linux coexistiendo. Esto se verá en la parte de Linux, segundo trimestre.
 
 ### Ejercicio 4. Preparar un USB con diskpart para instalación.
 
+select disk x (Replace X with your USB flash drive number, we are using 2 in this example)
+
+clean - This wipes the drive
+
+create partition primary- Creates partition
+
+select partiion 1- Selects partition 1
+
+ative- Marks the current partition as active
+
+format FS=NTFS QUICK - This formats the partition
+
+assign letter=H - Assigns a drive letter.
+
+exit
+
 ### Ejercicio 5. Gestión discos:
-* Configure disks, volumes, and file systems
-* Create and configure virtual hard disks
-* Create and configure Storage Spaces
-* Configure removable devices
+
+#### Particiones MBR y GPT
+
+* MBR (Master Boot Record): creado durante el particionado del disco y ubicado en su primer sector, su emplazamiento
+soporta cuatro particiones principales, pero el ordenador solo arrancará desde aquella definida como activa (partición
+del sistema) y contendrá el gestor de arranque. Es posible definir más de cuatro particiones, designando una (o más)
+de las particiones principales como extendidas y atribuirle así particiones lógicas para almacenar los datos. La BIOS
+del ordenador requiere cierta tecnología para arrancar Windows 10. En caso de que la tabla MBR se corrompa, el
+sistema no podrá arrancar. **El tamaño máximo de las particiones MBR es de 2 TB.**
+
+* GPT (GUID Partition Table): disponible en los ordenadores UEFI, la tabla de particiones GPT resuelve las restricciones
+vinculadas a los discos MBR. A diferencia de la estructura anterior, que contiene las referencias LBA (Logical Block
+Address) codificadas en 32 bits, una partición GPT tiene sus referencias definidas en 64 bits. Además, una partición del
+sistema ESP (Extensible Firmware Interface System Partition) se almacena en cada disco arrancable, al igual que una
+partición MSR (Microsoft Reserved Partition). La tecnología GPT está disponible con Windows Vista, Windows 7,
+Windows Server 2008, Windows Server 2012, Windows 8.1 y Windows 10.
+
+Una BIOS en un sistema de 32 o 64 bits se encarga de la lectura de datos de una partición GPT. En una arquitectura
+de 64 bits con un sistema UEFI, es posible utilizar una partición GPT para arrancar Windows 10.
+
+Un disco GPT gestiona hasta 128 particiones principales y ofrece una redundancia para un tamaño de volumen
+máximo de 18 EB (exabytes).
+
+Durante la instalación de Windows 10 en un disco de arranque GPT, este último crea tres particiones:
+
+  - ESP: con un tamaño variable, esta partición contiene el gestor de arranque necesario para ejecutar Windows 10. arranque necesario para ejecutar Windows 10.
+  - Sistema operativo
+  - MSR: partición oculta que no posee ninguna letra de unidad, reservada para el funcionamiento de Windows 10. No
+debe estar encriptada.
+
+Tres herramientas permiten administrar las particiones utilizadas por Windows 10: Consola de administración de
+discos, PowerShell y DiskPart.
+
+Por ejemplo, es posible convertir de forma sencilla una partición MBR en una partición GPT y viceversa, empleando la
+herramienta DiskPart.
