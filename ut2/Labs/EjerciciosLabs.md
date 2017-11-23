@@ -313,3 +313,8 @@ discos, PowerShell y DiskPart.
 
 Por ejemplo, es posible convertir de forma sencilla una partición MBR en una partición GPT y viceversa, empleando la
 herramienta DiskPart.
+
+
+## Referencias y Enlaces
+
+* Desactivar el Windows Update: <https://4sysops.com/archives/disable-windows-10-update-in-the-registry-and-with-powershell/>
