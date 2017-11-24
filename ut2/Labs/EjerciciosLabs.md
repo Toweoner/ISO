@@ -315,6 +315,15 @@ Por ejemplo, es posible convertir de forma sencilla una partición MBR en una pa
 herramienta DiskPart.
 
 
+# Ejercicio 5. Creación de Volúmenes:
+
+**NOTA Importante**: Añadir discos a la VMWARE es sencillo. Pero actualmente sí que nos funciona hacerlo con la instancia encendida (no como lo dije en clase, parando la máquina). Eso nos permite realizar operaciones con discos de forma rápida y sencilla. 
+
+- Botón derecho sobre la instancia y seleccionar *Settings*
+- Añadir Hard Disk + SATA ó SCSI + Create new virtual disk + Tamaño elegido. El resto de opciones por defecto y finalizar.
+
+* Visto esto vamos a crear volúmenes. 
+
 ## Referencias y Enlaces
 
 * Desactivar el Windows Update: <https://4sysops.com/archives/disable-windows-10-update-in-the-registry-and-with-powershell/>
