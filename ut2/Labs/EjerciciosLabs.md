@@ -145,10 +145,10 @@ expand vdisk maximum=<size in mb>
 compact vdisk
 ```
 
-* Después de poder crearlo debe reiniciar el sistema de modo que la BIOS/UEFI pueda reconocer una ISO de Windows 10 Enterprise desde un dispositivo extraíble. 
+* Después de poder crearlo debe reiniciar el sistema de modo que la BIOS/UEFI pueda reconocer una ISO de Windows 10 Enterprise desde un dispositivo extraíble.
 * Desde la VMWARE, se para la máquina (Power Off) y se arranca desde la BIOS: Power On Firmware.
 * Se seleccion las opciones de arranque el dispositivo extraíble donde esté la ISO y se inicia la MV.
-* Después, en el arranque de instalación de Windows 10, se procede a la instalación y se pasa a la fase donde están los discos para instalar. Se pulsa ```Shift+F10```  t aparcerá la consola de comandos. 
+* Después, en el arranque de instalación de Windows 10, se procede a la instalación y se pasa a la fase donde están los discos para instalar. Se pulsa ```Shift+F10```  t aparcerá la consola de comandos.
 * Pasa a la unidad donde estén los discos virtuales y entre en la aplicación ```Diskpart```.
 
 ```
@@ -174,7 +174,7 @@ Después de reiniciar la máquina, debería ver la posibilidad de elegir un sist
 ### Ejercicio 3. Modifcar arranque con BCDEDIT
 
 
-* El comando **BCDEDIT** tiene como función modificar el arranque de sistemas Windows. 
+* El comando **BCDEDIT** tiene como función modificar el arranque de sistemas Windows.
 * Se necesita iniciar el CMD con privilegios de Administrador.
 
 - Para visualizar la ayuda del comando:
@@ -317,12 +317,12 @@ herramienta DiskPart.
 
 # Ejercicio 5. Creación de Volúmenes:
 
-**NOTA Importante**: Añadir discos a la VMWARE es sencillo. Pero actualmente sí que nos funciona hacerlo con la instancia encendida (no como lo dije en clase, parando la máquina). Eso nos permite realizar operaciones con discos de forma rápida y sencilla. 
+**NOTA Importante**: Añadir discos a la VMWARE es sencillo. Pero actualmente sí que nos funciona hacerlo con la instancia encendida (no como lo dije en clase, parando la máquina). Eso nos permite realizar operaciones con discos de forma rápida y sencilla.
 
 - Botón derecho sobre la instancia y seleccionar *Settings*
 - Añadir Hard Disk + SATA ó SCSI + Create new virtual disk + Tamaño elegido. El resto de opciones por defecto y finalizar.
 
-* Visto esto vamos a crear volúmenes. 
+* Visto esto vamos a crear volúmenes.
 - Añadamos 3 discos duros a la MV de 10 GB sin tener que parar la MV, tal y como habíamos dicho.
 
 ```
@@ -333,7 +333,7 @@ convert mbr    # Convertir a esquema MBR
 
 convert dynamic     # Para hacer volumen dinámico
 
-create volume simple size=10000      # 
+create volume simple size=10000      #
 
 create volume simple
 
@@ -360,3 +360,4 @@ detail disk
 ## Referencias y Enlaces
 
 * Desactivar el Windows Update: <https://4sysops.com/archives/disable-windows-10-update-in-the-registry-and-with-powershell/>
+* <https://www.windows-commandline.com/disable-automatic-updates-command-line/>
