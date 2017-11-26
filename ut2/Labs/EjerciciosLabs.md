@@ -1,5 +1,5 @@
 
-# Ejercicios de Labs
+# Gestión de almacenamiento en MS Windows. Reparación y mantenimiento de sistemas.
 
 * Los siguientes ejercicios se realizarán en clase. A modo de guión se pondrán aquí todos los procesos para que los alumnos puedan consultar los conocimientos de forma más sencilla.
 * En los pdfs en **Contenidos** se muestran varias capitulos que, a modo de extensión, podéis consultarlos porque es un libro bastante interesante y el que se usa para la **certificación MCSA**.
