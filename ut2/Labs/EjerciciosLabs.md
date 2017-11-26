@@ -372,7 +372,7 @@ disponibilidad.
 
 Existen seis niveles de RAID; cada uno utiliza su propio algoritmo. Vamos a detallar algunos antes de describir de forma más precisa la característica Espacios de almacenamiento.
 
-![](img/10_11_RAID_Levels.jpg)
+![alt-text](img/10_11_RAID_Levels.jpg)
 
 * **Volumen simple:** este tipo de volumen dinámico permite almacenar datos en una parte de un disco físico, pero puede ser extendido en el mismo disco. No presenta ninguna tolerancia a errores, por lo que cualquier fallo en el disco físico supondrá la pérdida de los volúmenes simples relacionados. El rendimiento de entrada/salida es equivalente al del disco físico anfitrión.
 
