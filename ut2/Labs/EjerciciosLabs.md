@@ -323,6 +323,39 @@ herramienta DiskPart.
 - Añadir Hard Disk + SATA ó SCSI + Create new virtual disk + Tamaño elegido. El resto de opciones por defecto y finalizar.
 
 * Visto esto vamos a crear volúmenes. 
+- Añadamos 3 discos duros a la MV de 10 GB sin tener que parar la MV, tal y como habíamos dicho.
+
+```
+
+convert gpt    # Convertir a esquema GPT
+
+convert mbr    # Convertir a esquema MBR
+
+convert dynamic     # Para hacer volumen dinámico
+
+create volume simple size=10000      # 
+
+create volume simple
+
+list volume
+
+select volume 0
+
+```
+
+
+Con detail podemos averiguar cualquier información detallada tanto de discos, particiones como volúmenes:
+
+```
+select volume 0
+detail volume
+
+select partition 0
+detail partition
+
+select disk 0
+detail disk
+```
 
 ## Referencias y Enlaces
 
