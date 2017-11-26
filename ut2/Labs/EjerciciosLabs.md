@@ -311,8 +311,8 @@ debe estar encriptada.
 Tres herramientas permiten administrar las particiones utilizadas por Windows 10: Consola de administración de
 discos, PowerShell y DiskPart.
 
-Por ejemplo, es posible convertir de forma sencilla una partición MBR en una partición GPT y viceversa, empleando la
-herramienta DiskPart.
+Por ejemplo, es posible convertir de forma sencilla una partición MBR en una partición GPT y viceversa, empleando la herramienta DiskPart.
+
 
 
 # Ejercicio 5. Creación de Volúmenes:
@@ -356,6 +356,186 @@ detail partition
 select disk 0
 detail disk
 ```
+
+
+### Espacios de Almacenamiento (RAID)
+
+Mediante Windows 10, el usuario tiene acceso a tecnologías de redundancia para protegerse contra un fallo de
+disco o agregar espacio adicional en caso de capacidad insuficiente: se trata de la característica Espacios de
+almacenamiento.
+
+Esta funcionalidad proporciona a los discos NTFS una mejor fiabilidad y, sobre todo, funcionalidades de recuperación.
+
+Windows 10 permite repartir los datos en varios discos para crear tolerancia a fallos o mejorar el rendimiento en lectura/escritura: se trata de un sistema RAID por software, menos eficiente que un RAID por hardware, que se
+base en un controlador dedicado, pero útil de todas formas para mejorar la seguridad de los datos, aumentando su
+disponibilidad.
+
+Existen seis niveles de RAID; cada uno utiliza su propio algoritmo. Vamos a detallar algunos antes de describir de forma más precisa la característica Espacios de almacenamiento.
+
+![](img/10_11_RAID_Levels.jpg)
+
+* **Volumen simple:** este tipo de volumen dinámico permite almacenar datos en una parte de un disco físico, pero puede ser extendido en el mismo disco. No presenta ninguna tolerancia a errores, por lo que cualquier fallo en el disco físico supondrá la pérdida de los volúmenes simples relacionados. El rendimiento de entrada/salida es equivalente al del disco físico anfitrión.
+
+
+Con Windows 10 es posible crear más de 26 volúmenes simples, pero solo hay disponibles 26 letras de unidad (el
+alfabeto) para acceder a estos volúmenes. En este caso, puede montar las particiones sin letra de unidad en carpetas.
+
+* **Volumen distribuido:** permite agregar espacio disponible en disco duro en al menos *dos discos físicos* (y hasta 32) en un único volumen. A pesar de la falta de tolerancia a fallos, es posible reducir o extender un volumen distribuido. Durante su creación, hay que definir la cantidad de espacio que se ha de asignar a partir de cada disco físico. Del mismo modo, durante su reducción, no es posible reducir un espacio de volumen distribuido en un único disco, sino en todos los discos que lo componen. 
+
+* **Volumen seccionado (RAID0)**: equivalente al volumen distribuido en el número mínimo de discos (2) y máximo
+(32) que se han de emplear, el volumen seccionado necesita un espacio idéntico en cada disco. No se puede extender
+o reducir un volumen RAID0, pero los rendimientos de entrada/salida son mejores que los de un volumen simple o
+distribuido. Por último, no se proporciona ninguna tolerancia a fallos, la pérdida de un disco conlleva la pérdida de
+todo el volumen seccionado. RAID0 se utiliza con frecuencia para aislar el archivo de intercambio.
+
+* **Volumen reflejado (RAID1):** se necesitan dos discos físicos que contenga cada uno los mismos datos que el otro; de ahí el uso de la palabra "reflejado" para describir esta redundancia. RAID1 permite efectuar una tolerancia a fallos: la capacidad utilizada para crear este tipo de volumen es el 50% del espacio total disponible en disco duro. De esta forma, si se utilizan dos discos de 100 GB para crear un volumen reflejado, el usuario solo podrá utilizar 100 GB. El coste por byte resulta, de este modo, relativamente importante. En caso de fallo de disco, Windows 10 es capaz de continuar funcionando normalmente, esperando el remplazo del disco defectuoso y la reconstrucción de RAID1.
+
+* **Volumen seccionado con paridad (RAID5):** hacen falta al menos 3 discos físicos para crear un volumen
+seccionado, y hasta 32 discos. Este sistema proporciona una tolerancia a fallos pero menor rendimiento que RAID1: su recuperación es más rápida en caso de fallo. Un volumen RAID5 utiliza la paridad, información que indica sobre qué disco se ha almacenado uno u otro fragmento de datos. De esta forma, si un fragmento de un dato se pierde, la comparación entre los datos de paridad y los demás fragmentos del dato permitirían reconstruir el fragmento perdido.
+
+RAID5 gestiona el fallo de un disco duro, y el espacio disponible en disco se calcula empleando la siguiente fórmula:
+
+**Espacio disponible = (espacio en disco total de uno de los discos) x ((número de discos de RAID 5) - 1)
+Si el usuario tiene 3 discos con una capacidad de 10 GB cada uno, el espacio disponible en disco será de 20 GB.**
+
+Los volúmenes RAID5 no pueden ser extendidos.
+
+* La característica Espacios de almacenamiento utiliza estas tecnologías de redundancia reuniendo los discos del
+usuario, internos y externos, en un grupo de almacenamiento (o pool) único, representado por un disco virtual.
+Este se utiliza como cualquier disco físico: puede ser particionado, formateado, eliminado, cifrado con BitLocker...
+
+* Este grupo de almacenamiento no es fijo, sino que evoluciona en función de las necesidades de redundancia o de
+espacio en disco.
+
+* **Windows 10 no puede arrancar desde un espacio de almacenamiento**.
+
+* El grupo de almacenamiento puede estar compuesto de discos físicos con capacidades y conexiones diferentes.
+
+La asignación de recursos es dinámica; por ejemplo, el usuario crea un espacio fijo de 20 TB y agrega dos discos
+físicos de 3 TB al grupo de almacenamiento. ¿Y los 14 TB que faltan? El sistema efectuará una solicitud desde el
+Centro de actividades, para agregar la capacidad solamente si se alcanza la capacidad de los dos discos físicos. 
+
+Si fuera necesario, es posible aumentar el tamaño máximo del espacio (20 TB en nuestro ejemplo).
+Cuando se añade un disco físico al grupo de almacenamiento, sus datos se borran y se vuelven inaccesibles, incluso desde la papelera de reciclaje.
+
+En resumen, el espacio de almacenamiento contiene la cantidad teórica de memoria disponible, el grupo de
+almacenamiento administra por lo menos uno (o varios) discos físicos en función de las necesidades del usuario.
+---
+
+## Reparación de Windows 10
+
+### CHKDSK: Check Disk: Comprueba un disco y muestra un informe de estado.
+
+```
+
+CHKDSK [volumen[[ruta]nombre de archivo]]] [/F] [/V] [/R] [/X] [/I] [/C]
+ [/L[:tamaño]] [/B] [/scan] [/spotfix]
+
+
+  volumen         Especifica la letra de unidad (seguida por dos puntos),
+                  el punto de montaje o el nombre de volumen.
+  filename         Solo para FAT/FAT32: especifica los archivos en los que
+                      se comprobará la fragmentación.
+  /F              Corrige los errores del disco.
+  /V                  Para FAT/FAT32: muestra la ruta de acceso completa y el nombre de cada
+                      archivo en el disco.
+                      Para NTFS: muestra mensajes de limpieza si los hay.
+  /R                  Encuentra sectores defectuosos y recupera la información legible
+                      (implica el uso de /F si no se especifica /scan).
+  /L:tamaño             Solo para NTFS: cambia el tamaño del archivo de registro al número especificado de
+                      kilobytes. Si no se especifica ningún tamaño, muestra
+                      el tamaño actual.
+  /X                  Obliga al volumen a desmontarse previamente si es necesario.
+                      Ningún manipulador abierto al volumen será válido
+                      (implica el uso de /F).
+  /I                  Solo para NTFS: realiza una comprobación menos exhaustiva de
+                      entradas de índice.
+  /C                  Solo NTFS: omite la comprobación de ciclos dentro de la
+                      estructura de carpetas.
+  /B                  Solo NTFS: vuelve a evaluar los clústeres defectuosos del volumen
+                      (implica el uso de /R).
+  /scan               Solo NTFS: ejecuta un examen en línea en el volumen.
+  /forceofflinefix    Solo NTFS: (se debe usar con /scan)
+                      omite todas las reparaciones en línea; todos los defectos encontrados
+                      se ponen en cola para su reparación sin conexión (es decir, "chkdsk /spotfix").
+  /perf               Solo NTFS: (se debe usar con /scan)
+                      usa más recursos del sistema para completar un examen lo más
+                      rápido posible. Esto podría afectar negativamente al rendimiento de otras tareas
+                      que se ejecuten en el sistema.
+  /spotfix            Solo NTFS: ejecuta una corrección puntual en el volumen.
+  /sdcleanup          Solo NTFS: recolecta los elementos no usados en los datos no necesarios del descriptor de seguridad
+                      (implica el uso de /F).
+  /offlinescanandfix  Ejecuta un examen y reparación sin conexión en el volumen.
+  /freeorphanedchains Solo FAT/FAT32/exFAT: libera las cadenas de clúster huérfanas que pueda haber
+                      en lugar de recuperar su contenido.
+  /markclean          Solo FAT/FAT32/exFAT: marca el volumen como limpio si no
+                      se detectan daños, incluso aunque no se haya especificado /F.
+
+Los modificadores /I o /C reducen la cantidad de tiempo necesario para ejecutar Chkdsk omitiendo
+ciertas comprobaciones en el volumen.
+```
+
+Ejemplos de uso:
+
+```
+chkdsk d: /F /R /X /spotfix   # Escanea la unidad d:, corrige errores, sectores defectuosos, fuera el desmontaje y realiza un chequeo puntual que hace que en NTFS sea rápido el comando
+```
+
+### Ejercicio 6. Crear espacios de almacenamiento
+
+* Para crear un grupo de almacenamiento, conecte el segundo disco que usará con esta funcionalidad:
+Windows 10 no puede arrancar a partir un espacio de almacenamiento.
+
+* Los dispositivos de almacenamiento extraíble USB no están soportados por la característica Espacios de
+almacenamiento, aunque se encuentren formateados como NTFS y cuenten con una gran capacidad de espacio en
+disco.
+
+* Haga clic con el botón derecho en el menú Inicio y escoja Panel de control. Haga doble clic en Espacios
+de almacenamiento.
+
+* Haga clic en Crear un nuevo grupo y espacios de almacenamiento. Acepte haciendo clic en el botón Sí
+cuando aparezca la ventana de control de cuentas de usuario.
+
+* Seleccione el disco de destino marcando la casilla correspondiente y, a continuación, haga clic en el botón
+Crear grupo. Observe que todos los datos presentes en él serán eliminados. Para verificar su contenido,
+haga clic en Ver archivos.
+
+* Defina el Nombre de su espacio de almacenamiento y, a continuación, la Letra de unidad utilizada por el
+disco externo. Seleccione el sistema de archivos REFS.
+
+A continuación, seleccione el tipo de resistencia entre las cuatro opciones siguientes:
+
+	- Simple (sin resistencia): necesita un disco y copia los datos en él. No se garantiza ninguna tolerancia a fallos. Esta es la opción que deberá tomar para este ejemplo.
+	- Reflejo doble: copia los datos en dos discos, garantizando redundancia. Equivalente a RAID 1.
+	- Reflejo triple: necesita tres discos. Aunque dos discos fallaran al mismo tiempo, los datos estarían todavía disponibles.
+	- Paridad: los datos se copian en al menos tres discos mediante el sistema de paridad. Un disco con fallos mantendrá la redundancia. Este tipo de resistencia es equivalente a RAID 
+
+La característica Espacios de almacenamiento gestiona el número de errores capaz de tolerar antes
+de impedir el acceso a los datos: es el Quórum. El acceso a los datos se mantiene operativo mientras
+el número de discos operativos supere el número de discos averiados. Por ejemplo, si el espacio está
+definido como espejo triple y todos los discos del grupo pueden utilizarse, el administrador tendrá
+siempre acceso a los datos aunque dos de los discos estén dañados.
+
+* A continuación, defina el tamaño del grupo de almacenamiento creado en GB o TB. El tamaño presentado
+por defecto es el del disco externo insertado. Acepte haciendo clic en Crear espacio de almacenamiento.
+Se formatea el disco externo. En la ventana Espacios de almacenamiento, el usuario puede ver su
+grupo de almacenamiento, Cambiar el nombre del grupo, Eliminar y Ver archivos o Agregar
+unidades suplementarias.
+
+* Si conectamos un disco físico de un Espacio de almacenamiento a un sistema operativo Windows 7, este no podrá
+gestionar el esquema de particionado de la unidad.
+
+```
+# Para crear un grupo de almacenamiento empleando el lenguaje PowerShell, introduzca los siguientes comandos:
+
+$a = (getphysicaldisk CanPool $True)
+
+# Hemos definido una variable $A que contiene los discos físicos elegibles para los Espacios de almacenamiento:
+
+NewStoragePool FriendlyName "Almacenamiento de Javier" StorageSubSystemFriendlyName "Storage Spaces*" PhysicalDisks $a
+```
+
+https://msdn.microsoft.com/es-es/library/jj822938(v=ws.11).aspx
 
 ## Referencias y Enlaces
 
