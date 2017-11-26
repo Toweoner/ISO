@@ -315,7 +315,7 @@ Por ejemplo, es posible convertir de forma sencilla una partición MBR en una pa
 
 
 
-# Ejercicio 5. Creación de Volúmenes:
+### Ejercicio 5. Creación de Volúmenes:
 
 **NOTA Importante**: Añadir discos a la VMWARE es sencillo. Pero actualmente sí que nos funciona hacerlo con la instancia encendida (no como lo dije en clase, parando la máquina). Eso nos permite realizar operaciones con discos de forma rápida y sencilla.
 
@@ -358,7 +358,7 @@ detail disk
 ```
 
 
-### Espacios de Almacenamiento (RAID)
+## Espacios de Almacenamiento (RAID)
 
 Mediante Windows 10, el usuario tiene acceso a tecnologías de redundancia para protegerse contra un fallo de
 disco o agregar espacio adicional en caso de capacidad insuficiente: se trata de la característica Espacios de
