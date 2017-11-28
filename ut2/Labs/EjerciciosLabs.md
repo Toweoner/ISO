@@ -511,8 +511,7 @@ g:\xcopy g:\*.* /s /h /f h:\
     Flash USB.
 
 -   Existe otra opción, que es utilizar **Rufus**, una aplicación que vale para
-    casi cualquier sistema operativo. Pero es gráfica. \#\#\# Ejercicio 5.
-    Gestión discos:
+    casi cualquier sistema operativo. Pero es gráfica.
 
  
 
@@ -579,6 +578,21 @@ Tres herramientas permiten administrar las particiones utilizadas por Windows
 
 Por ejemplo, es posible convertir de forma sencilla una partición MBR en una
 partición GPT y viceversa, empleando la herramienta DiskPart.
+
+ 
+
+Sistemas de Ficheros
+--------------------
+
+ 
+
+| **Sistema de Ficheros** | **Descripción**                                                            |
+|-------------------------|----------------------------------------------------------------------------|
+| NTFS                    | Sistema de Ficheros empresarial utilizado por más de 20 años               |
+| ReFS                    | \- Tamaño máximo de ficheros es de 16 EB. Máximo tamaño de volumen de 1 YB |
+| exFAT                   |                                                                            |
+| FAT32                   |                                                                            |
+| FAT                     |                                                                            |
 
  
 
@@ -685,21 +699,260 @@ DISKPART> create volume
 
  
 
-Con detail podemos averiguar cualquier información detallada tanto de discos,
-particiones como volúmenes:
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+DISKPART> list volume
+
+  Núm Volumen Ltr  Etiqueta     Fs     Tipo        Tamaño   Estado     Info
+  ----------- ---  -----------  -----  ----------  -------  ---------  --------
+* Volumen 8                     RAW    Simple        19 GB  Correcto
+  Volumen 5     C               NTFS   Simple        59 GB  Correcto   Sistema
+  Volumen 6     G   disco2      NTFS   Simple        55 GB  Correcto
+  Volumen 7     D   CENA_X64FR  UDF    DVD-ROM     4112 MB  Correcto
+
+DISKPART> shrink desired=10000
+
+DiskPart redujo correctamente el volumen en:    9 GB
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+ 
+
+### Ejercicio. Creación de volúmenes:
+
+ 
+
+Podemos crear varios volúmenes de forma que si tenemos un disco de 19 GB podemos
+crear varios volúmenes en el propio disco de la siguiente forma. Fijaos que se
+crea primero un volumen de 10000, otro de 10000 y luego se crea el volumen con
+el resto del espacio.
 
  
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-select volume 0
-detail volume
+DISKPART> list disk
 
-select partition 0
-detail partition
+  Núm Disco  Estado      Tamaño   Disp     Din  Gpt
+  ---------- ----------  -------  -------  ---  ---
+  Disco 0    En línea        120 GB  5000 MB   *
+  Disco 1    En línea         20 GB    19 GB   *
+  Disco 2    En línea         20 GB    20 GB
+  Disco 3    En línea         20 GB    20 GB
+  Disco 4    En línea         10 GB    10 GB
+  Disco 5    En línea         10 GB    10 GB
+  Disco 6    En línea         10 GB    10 GB
 
-select disk 0
-detail disk
+DISKPART> select disk 1
+
+El disco 1 es ahora el disco seleccionado.
+
+DISKPART> create volume simple size=10000
+
+DiskPart creó el volumen correctamente.
+
+DISKPART> create volume simple size=10000
+
+DiskPart creó el volumen correctamente.
+
+DISKPART> list volume
+
+  Núm Volumen Ltr  Etiqueta     Fs     Tipo        Tamaño   Estado     Info
+  ----------- ---  -----------  -----  ----------  -------  ---------  --------
+* Volumen 0                     RAW    Simple         9 GB  Correcto
+  Volumen 1                     RAW    Simple         9 GB  Correcto
+  Volumen 5     C               NTFS   Simple        59 GB  Correcto   Sistema
+  Volumen 6     G   disco2      NTFS   Simple        55 GB  Correcto
+  Volumen 7     D   CENA_X64FR  UDF    DVD-ROM     4112 MB  Correcto
+
+DISKPART> create volume simple
+
+DiskPart creó el volumen correctamente.
+
+DISKPART> list volume
+
+  Núm Volumen Ltr  Etiqueta     Fs     Tipo        Tamaño   Estado     Info
+  ----------- ---  -----------  -----  ----------  -------  ---------  --------
+  Volumen 0                     RAW    Simple         9 GB  Correcto
+  Volumen 1                     RAW    Simple         9 GB  Correcto
+* Volumen 2                     RAW    Simple       478 MB  Correcto
+  Volumen 5     C               NTFS   Simple        59 GB  Correcto   Sistema
+  Volumen 6     G   disco2      NTFS   Simple        55 GB  Correcto
+  Volumen 7     D   CENA_X64FR  UDF    DVD-ROM     4112 MB  Correcto
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+A continuación se puede ver cómo se selecciona el volumen 2, que tiene 478MB y
+se borra, luego reducimos a 5000MB el columen 1 y creamos otro volumen con el
+espacio restante.
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+DISKPART> list volume
+
+  Núm Volumen Ltr  Etiqueta     Fs     Tipo        Tamaño   Estado     Info
+  ----------- ---  -----------  -----  ----------  -------  ---------  --------
+  Volumen 0                     RAW    Simple         9 GB  Correcto
+  Volumen 1                     RAW    Simple         9 GB  Correcto
+* Volumen 2                     RAW    Simple       478 MB  Correcto
+  Volumen 5     C               NTFS   Simple        59 GB  Correcto   Sistema
+  Volumen 6     G   disco2      NTFS   Simple        55 GB  Correcto
+  Volumen 7     D   CENA_X64FR  UDF    DVD-ROM     4112 MB  Correcto
+
+DISKPART> select volume 2
+
+El volumen 2 es el volumen seleccionado.
+
+DISKPART> delete volume
+
+DiskPart eliminó correctamente el volumen.
+
+DISKPART> list volume
+
+  Núm Volumen Ltr  Etiqueta     Fs     Tipo        Tamaño   Estado     Info
+  ----------- ---  -----------  -----  ----------  -------  ---------  --------
+  Volumen 0                     RAW    Simple         9 GB  Correcto
+  Volumen 1                     RAW    Simple         9 GB  Correcto
+  Volumen 5     C               NTFS   Simple        59 GB  Correcto   Sistema
+  Volumen 6     G   disco2      NTFS   Simple        55 GB  Correcto
+  Volumen 7     D   CENA_X64FR  UDF    DVD-ROM     4112 MB  Correcto
+
+DISKPART> list volume
+
+  Núm Volumen Ltr  Etiqueta     Fs     Tipo        Tamaño   Estado     Info
+  ----------- ---  -----------  -----  ----------  -------  ---------  --------
+  Volumen 0                     RAW    Simple         9 GB  Correcto
+  Volumen 1                     RAW    Simple         9 GB  Correcto
+  Volumen 5     C               NTFS   Simple        59 GB  Correcto   Sistema
+  Volumen 6     G   disco2      NTFS   Simple        55 GB  Correcto
+  Volumen 7     D   CENA_X64FR  UDF    DVD-ROM     4112 MB  Correcto
+
+DISKPART> select volume 1
+
+El volumen 1 es el volumen seleccionado.
+
+DISKPART> shrink desired=5000
+
+DiskPart redujo correctamente el volumen en: 5000 MB
+
+DISKPART> list volume
+
+  Núm Volumen Ltr  Etiqueta     Fs     Tipo        Tamaño   Estado     Info
+  ----------- ---  -----------  -----  ----------  -------  ---------  --------
+  Volumen 0                     RAW    Simple         9 GB  Correcto
+* Volumen 1                     RAW    Simple      5000 MB  Correcto
+  Volumen 5     C               NTFS   Simple        59 GB  Correcto   Sistema
+  Volumen 6     G   disco2      NTFS   Simple        55 GB  Correcto
+  Volumen 7     D   CENA_X64FR  UDF    DVD-ROM     4112 MB  Correcto
+
+DISKPART> create volume simple
+
+DiskPart creó el volumen correctamente.
+
+DISKPART> list volume
+
+  Núm Volumen Ltr  Etiqueta     Fs     Tipo        Tamaño   Estado     Info
+  ----------- ---  -----------  -----  ----------  -------  ---------  --------
+  Volumen 0                     RAW    Simple         9 GB  Correcto
+  Volumen 1                     RAW    Simple      5000 MB  Correcto
+* Volumen 2                     RAW    Simple      5478 MB  Correcto
+  Volumen 5     C               NTFS   Simple        59 GB  Correcto   Sistema
+  Volumen 6     G   disco2      NTFS   Simple        55 GB  Correcto
+  Volumen 7     D   CENA_X64FR  UDF    DVD-ROM     4112 MB  Correcto
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+Si se desea aumentar otra vez el espacio, tenemos que hacerlo sobre el disco que
+tiene el volumen:
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+DISKPART> list volume
+
+  Núm Volumen Ltr  Etiqueta     Fs     Tipo        Tamaño   Estado     Info
+  ----------- ---  -----------  -----  ----------  -------  ---------  --------
+  Volumen 0                     RAW    Simple        10 GB  Correcto
+  Volumen 5     C               NTFS   Simple        59 GB  Correcto   Sistema
+  Volumen 6     G   disco2      NTFS   Simple        55 GB  Correcto
+  Volumen 7     D   CENA_X64FR  UDF    DVD-ROM     4112 MB  Correcto
+
+DISKPART> select volume 0
+
+El volumen 0 es el volumen seleccionado.
+
+DISKPART> extend size=500 disk=1
+
+DiskPart extendió el volumen correctamente.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+Luego se formatea en fat32 (aunque puede ser en fat32, fat, extfs, refs):
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+DISKPART> format fs=ntfs label="vol1" quick
+
+  100 por ciento completado
+
+DiskPart formateó el volumen correctamente.
+
+DISKPART> select volume 8
+
+El volumen 8 es el volumen seleccionado.
+
+DISKPART> assign letter=J
+
+DiskPart asignó correctamente una letra de unidad o punto de montaje.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+Para convertir un volumen de ntfs a fat32 o viceversa hay que salir de diskpart
+y hacerlo en la propia consola de CMD con autoridad de Administrador:
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Windows\system32>help convert
+Convierte un volumen FAT a NTFS.
+
+CONVERT volumen /FS:NTFS [/V] [/CvtArea:nombre_archivo] [/NoSecurity] [/X]
+
+  volumen      Especifica la letra de unidad (seguida por dos puntos)
+               punto de montaje o nombre de volumen.
+  /FS:NTFS     Especifica que el volumen se convertirá a NTFS.
+  /V           Especifica que Convert se ejecutará en modo detallado.
+  /CvtArea:nombre_archivo
+               Especifica un archivo contiguo en el directorio raíz, que será
+               el marcador de posición para los archivos de sistema NTFS.
+  /NoSecurity  Especifica que la configuración de seguridad en los archivos
+               y directorios convertidos permitirá que todos los usuarios
+               tengan acceso a ellos.
+  /X           Fuerza a que el volumen se desmonte primero si es necesario.
+               Todos los identificadores abiertos al volumen no serán
+               válidos.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+Si queremos convertir una partición de fat a ntfs (nunca al revés), tenemos que
+saber la unidad (K) y se utiliza el modificador /X para desmontaje automático:
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+convert K: /FS:NTFS /X 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
 
  
 
@@ -708,7 +961,17 @@ Powershell para gestión de discos
 
  
 
-Para
+
+
+| **Comando**     | **Descrpción** | **Parámetros Adicionales** |
+|-----------------|----------------|----------------------------|
+| Get-Disk        |                | \-FriendlyName             |
+| Clear-Disk      |                |                            |
+| Initialize-Disk |                |                            |
+| Set-Disk        |                |                            |
+| Get-Volume      |                |                            |
+| Format-Volume   |                |                            |
+| Get-Partition   |                |                            |
 
  
 
@@ -750,6 +1013,10 @@ cluster y virtualizado como se ve en la siguiente imagen:
  
 
 ![](https://docs.microsoft.com/es-es/windows-server/storage/storage-spaces/media/hyper-converged-solution-using-storage-spaces-direct-in-windows-server-2016/storagespacesdirecthyperconverged.png)
+
+![](http://2.bp.blogspot.com/-3u0jVvsGAWs/UfCLSh62xMI/AAAAAAABbWA/xX_iUKliiRQ/s1600/8738.image_2+(1).png)
+
+ 
 
 En MS Windows existen diferentes tipos de Volúmenes para realizar Espacios de
 Almacentamiento y que se pasan a definir:
@@ -868,6 +1135,8 @@ discos físicos en función de las necesidades del usuario.
  
 
 ### Ejercicio 6. Crear espacios de almacenamiento
+
+ 
 
 -   Para crear un grupo de almacenamiento, conecte el segundo disco que usará
     con esta funcionalidad: Windows 10 no puede arrancar a partir un espacio de
