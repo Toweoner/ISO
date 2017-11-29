@@ -1464,3 +1464,7 @@ https://msdn.microsoft.com/es-es/library/jj822938(v=ws.11).asp
 ### Espacios de almacenamiento
 
 https://docs.microsoft.com/en-us/powershell/module/storage/new-virtualdisk?view=win10-ps
+
+https://technet.microsoft.com/en-us/library/hh831739(v=ws.11).aspx
+
+https://technet.microsoft.com/es-es/library/hh848702(v=wps.630).aspx
