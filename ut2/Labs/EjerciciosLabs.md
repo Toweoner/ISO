@@ -562,7 +562,6 @@ crea tres particiones:
 
 -   ESP: con un tamaño variable, esta partición contiene el gestor de arranque
     necesario para ejecutar Windows 10. arranque necesario para ejecutar Windows
-    10.
 
 -   Sistema operativo
 
@@ -646,9 +645,6 @@ DiskPart convirtió correctamente el disco seleccionado en el formato GPT.
 DISKPART> convert dynamic
 
 DiskPart convirtió correctamente el disco seleccionado en el formato dinámico.
-
-
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
@@ -938,7 +934,6 @@ CONVERT volumen /FS:NTFS [/V] [/CvtArea:nombre_archivo] [/NoSecurity] [/X]
   /X           Fuerza a que el volumen se desmonte primero si es necesario.
                Todos los identificadores abiertos al volumen no serán
                válidos.
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
@@ -960,8 +955,6 @@ Powershell para gestión de discos
 ---------------------------------
 
  
-
-
 
 | **Comando**     | **Descripción** | **Parámetros Adicionales** |
 |-----------------|-----------------|----------------------------|
@@ -1218,6 +1211,7 @@ FriendlyName OperationalStatus HealthStatus IsPrimordial IsReadOnly
 Primordial   OK                Healthy      True         False     
 
 
+
 PS G:\> Get-StorageSubSystem
 
 FriendlyName                       HealthStatus OperationalStatus
@@ -1240,12 +1234,9 @@ FriendlyName ResiliencySettingName OperationalStatus HealthStatus IsManualAttach
 ------------ --------------------- ----------------- ------------ --------------  ----
 virtual1     Mirror                OK                Healthy      False          27 GB
 
-# Si queremos borrar
+# Si queremos borrar el disco virtual
 
 PS G:\> Remove-VirtualDisk -FriendlyName virtual1 -Confirm:$false
-
-
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
@@ -1291,15 +1282,15 @@ PS G:\> New-VirtualDisk -StoragePoolFriendlyName LUN-1tb -FriendlyName virtual1 
 # Paridad
 
 PS G:\> New-VirtualDisk -StoragePoolFriendlyName LUN-1tb -FriendlyName virtual1 -Size 27GB -ResiliencySettingName Parity -ProvisioningType Fixed -PhysicalDiskRedundancy 2
-
-
-
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
 
-Para añadir un disco físico al storage pool mediante friendly name
+===== Esta parte está pendiente de que se pueda impartir ======
+
+ 
+
+-   Para añadir un disco físico al storage pool mediante friendly name
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 PS C:\> $PDToAdd = Get-PhysicalDisk -FriendlyName PhysicalDisk5
@@ -1308,7 +1299,7 @@ PS C:\> Add-PhysicalDisk -PhysicalDisks $PDToAdd -StoragePoolFriendlyName Compan
 
  
 
-Para añdir todos los discos físicos:
+-   Para añadir todos los discos físicos:
 
  
 
@@ -1319,7 +1310,7 @@ PS C:\> Add-PhysicalDisk -StoragePoolFriendlyName "Demo Pool" -PhysicalDisks $PD
 
  
 
-Añadirlo al virtual:
+-   Añadirlo al virtual:
 
  
 
@@ -1329,17 +1320,86 @@ PS C:\> Add-PhysicalDisk –VirtualDiskFriendlyName UserData –PhysicalDisks (G
 
  
 
-También se pueden utilizar Tiers o capas para mezclar discos hdd y ssd:
+-   Eliminar un disco del Storage Pool:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+PS C:\> $PDToRemove = Get-PhysicalDisk -Friendlyname "PhysicalDisk25"
+PS C:\> Remove-PhysicalDisk -PhysicalDisks $PDToRemove -StoragePoolFriendlyName "DemoPool"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+-   Eliminar un disco que está estropeado
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Visualizamos los discos físicos
+Get-PhysicalDisk
+
+# Luego los virtuales
+
+Get-Virtual-Disk
+
+# Ponemos el disco físico como Retired
+
+Set-PhysicalDisk -UniqueID '{...}' -Usage Retired
+
+# Reaparamos el disco virtual para que reestructure el resto
+
+Repair-VirtualDisk -FriendlyName 'My Virtual Disk'
+
+# Esto es para ver cómo va el proceso
+
+Get-StorageJob
+
+# Eliminamos el disco físico
+
+Remove-PhysicalDisk -UniqueID '{...}'
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+=======================================================================
+
+ 
+
+ 
+
+-   El resto se inicializa discos y formatea igual que los volúmenes. En primer
+    lugar podemos utilizar el comando Get-VirtualDisk, pero no muestra el número
+    del disco, que es lo que necesitamos. Utilizamos el comando Get-Disk, que si
+    nos dice ya qué número es el disco virtual. El resto es Inicializar, Crear
+    partición y Formatear. Después de eso, ya está listo para usar.
 
  
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-PS C:\> $SSD = Get-StorageTier -FriendlyName *SSD* PS C:\> $HDD = Get-StorageTier -FriendlyName *HDD* PS C:\> Get-StoragePool CompanyData | New-VirtualDisk -FriendlyName "UserData01" -ResiliencySettingName "Mirror" -StorageTiers $SSD, $HDD -StorageTierSizes 8GB, 32GB
+PS C:\Windows\system32> Get-VirtualDisk
+
+FriendlyName ResiliencySettingName OperationalStatus HealthStatus IsManualAttach  Size
+------------ --------------------- ----------------- ------------ --------------  ----
+virtual1     Simple                OK                Healthy      False          54 GB
+
+
+
+PS C:\Windows\system32> Get-Disk
+
+Number Friendly Name               Serial Number                    HealthStatus         OperationalStatus      Total Size Partition 
+                                                                                                                           Style     
+------ -------------               -------------                    ------------         -----------------      ---------- ----------
+7      virtual1                    {785d1a8a-f04d-4ac4-adda-be88... Healthy              Online                      54 GB GPT       
+
+
+
+PS C:\Windows\system32> New-Partition -DiskNumber 7 -DriveLetter N -UseMaximumSize 
+
+
+   DiskPath: \\?\storage#disk#{785d1a8a-f04d-4ac4-adda-be88581b050e}#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}
+
+PartitionNumber  DriveLetter Offset                                               Size Type                                          
+---------------  ----------- ------                                               ---- ----                                          
+2                N           135266304                                        53.87 GB Basic                                      
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
- 
-
-El resto se inicializa discos y formatea igual que los volúmenes.
 
  
 
