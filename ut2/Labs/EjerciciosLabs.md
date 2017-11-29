@@ -963,15 +963,15 @@ Powershell para gestión de discos
 
 
 
-| **Comando**     | **Descrpción** | **Parámetros Adicionales** |
-|-----------------|----------------|----------------------------|
-| Get-Disk        |                | \-FriendlyName             |
-| Clear-Disk      |                |                            |
-| Initialize-Disk |                |                            |
-| Set-Disk        |                |                            |
-| Get-Volume      |                |                            |
-| Format-Volume   |                |                            |
-| Get-Partition   |                |                            |
+| **Comando**     | **Descripción** | **Parámetros Adicionales** |
+|-----------------|-----------------|----------------------------|
+| Get-Disk        |                 | \-FriendlyName             |
+| Clear-Disk      |                 |                            |
+| Initialize-Disk |                 |                            |
+| Set-Disk        |                 |                            |
+| Get-Volume      |                 |                            |
+| Format-Volume   |                 |                            |
+| Get-Partition   |                 |                            |
 
  
 
@@ -1202,6 +1202,145 @@ NewStoragePool FriendlyName "Almacenamiento de Javier" StorageSubSystemFriendlyN
 
  
 
+Ejemplo de uso:
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+PS G:\> Get-PhysicalDisk
+
+PS G:\> $a = Get-PhysicalDisk -CanPool $true
+
+PS G:\> Get-StoragePool
+
+FriendlyName OperationalStatus HealthStatus IsPrimordial IsReadOnly
+------------ ----------------- ------------ ------------ ----------
+Primordial   OK                Healthy      True         False     
+
+
+PS G:\> Get-StorageSubSystem
+
+FriendlyName                       HealthStatus OperationalStatus
+------------                       ------------ -----------------
+Windows Storage on DESKTOP-G67K54L Healthy      OK               
+
+
+
+PS G:\> New-StoragePool -FriendlyName "LUN-1tb" -StorageSubSystemFriendlyName "Windows Storage on DESKTOP-G67K54L" -PhysicalDisks $a
+
+FriendlyName OperationalStatus HealthStatus IsPrimordial IsReadOnly
+------------ ----------------- ------------ ------------ ----------
+LUN-1tb      OK                Healthy      False        False     
+
+# Opciones por defecto
+
+PS G:\> New-VirtualDisk -StoragePoolFriendlyName LUN-1tb -FriendlyName virtual1 -Size 27GB
+
+FriendlyName ResiliencySettingName OperationalStatus HealthStatus IsManualAttach  Size
+------------ --------------------- ----------------- ------------ --------------  ----
+virtual1     Mirror                OK                Healthy      False          27 GB
+
+# Si queremos borrar
+
+PS G:\> Remove-VirtualDisk -FriendlyName virtual1 -Confirm:$false
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+Vamos a crear los diferentes storage: Simple, Mirror doble, Mirror Tiple y
+paridad:
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Simple
+
+PS G:\> Remove-VirtualDisk -FriendlyName virtual1 -Confirm:$false
+
+PS G:\> New-VirtualDisk -StoragePoolFriendlyName LUN-1tb -FriendlyName virtual1 -Size 27GB -ResiliencySettingName Simple
+
+FriendlyName ResiliencySettingName OperationalStatus HealthStatus IsManualAttach  Size
+------------ --------------------- ----------------- ------------ --------------  ----
+virtual1     Simple                OK                Healthy      False          28 GB
+
+# Simple con Provisión Thin
+
+PS G:\> Remove-VirtualDisk -FriendlyName virtual1 -Confirm:$false
+
+PS G:\> New-VirtualDisk -StoragePoolFriendlyName LUN-1tb -FriendlyName virtual1 -Size 27GB -ResiliencySettingName Simple -ProvisioningType Thin
+
+FriendlyName ResiliencySettingName OperationalStatus HealthStatus IsManualAttach  Size
+------------ --------------------- ----------------- ------------ --------------  ----
+virtual1     Simple                OK                Healthy      False          27 GB
+
+## Reflejo Doble
+
+PS G:\> New-VirtualDisk -StoragePoolFriendlyName LUN-1tb -FriendlyName virtual1 -Size 27GB -ResiliencySettingName Simple -ProvisioningType Thin -NumberOfColumns 2
+
+FriendlyName ResiliencySettingName OperationalStatus HealthStatus IsManualAttach  Size
+------------ --------------------- ----------------- ------------ --------------  ----
+virtual1     Simple                OK                Healthy      False          27 GB
+
+# Reflejo Tripe
+
+PS G:\> New-VirtualDisk -StoragePoolFriendlyName LUN-1tb -FriendlyName virtual1 -Size 27GB -ResiliencySettingName Mirror -ProvisioningType Thin -NumberOfColumns 3
+
+# Paridad
+
+PS G:\> New-VirtualDisk -StoragePoolFriendlyName LUN-1tb -FriendlyName virtual1 -Size 27GB -ResiliencySettingName Parity -ProvisioningType Fixed -PhysicalDiskRedundancy 2
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+Para añadir un disco físico al storage pool mediante friendly name
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+PS C:\> $PDToAdd = Get-PhysicalDisk -FriendlyName PhysicalDisk5
+PS C:\> Add-PhysicalDisk -PhysicalDisks $PDToAdd -StoragePoolFriendlyName CompanyData
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+Para añdir todos los discos físicos:
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+PS C:\> $PDToAdd = Get-PhysicalDisk -CanPool $True
+PS C:\> Add-PhysicalDisk -StoragePoolFriendlyName "Demo Pool" -PhysicalDisks $PDToAdd
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+Añadirlo al virtual:
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+PS C:\> Add-PhysicalDisk –VirtualDiskFriendlyName UserData –PhysicalDisks (Get-PhysicalDisk -FriendlyName PhysicalDisk3, PhysicalDisk4)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+También se pueden utilizar Tiers o capas para mezclar discos hdd y ssd:
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+PS C:\> $SSD = Get-StorageTier -FriendlyName *SSD* PS C:\> $HDD = Get-StorageTier -FriendlyName *HDD* PS C:\> Get-StoragePool CompanyData | New-VirtualDisk -FriendlyName "UserData01" -ResiliencySettingName "Mirror" -StorageTiers $SSD, $HDD -StorageTierSizes 8GB, 32GB
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+El resto se inicializa discos y formatea igual que los volúmenes.
+
  
 
 Reparación de Windows 10
@@ -1259,7 +1398,7 @@ Los modificadores /I o /C reducen la cantidad de tiempo necesario para ejecutar 
 ciertas comprobaciones en el volumen.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Ejemplos de uso:
+-   Ejemplo de uso:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 chkdsk d: /F /R /X /spotfix   # Escanea la unidad d:, corrige errores, sectores defectuosos, fuera el desmontaje y realiza un chequeo puntual que hace que en NTFS sea rápido el comando
@@ -1267,15 +1406,61 @@ chkdsk d: /F /R /X /spotfix   # Escanea la unidad d:, corrige errores, sectores 
 
  
 
-### Comandos Powershell para Gestión de Discos
+### Desfragmentación
 
-https://msdn.microsoft.com/es-es/library/jj822938(v=ws.11).aspx
+Si queremos desfragramentar la unidad D, debemos hacer lo siguiente:
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+optimize-volume -DriveLetter D -Defrag -Verbose
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### Análisis
+
+Si se requiere analizar la unidad D:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+optimize-volume -DriverLetter D -Analyze -Verbose
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### Optimización de discos SSD
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+optimize-volume -DriverLetter D -Retrim -Verbose
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+-   Para iniciar en modo restauración:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+shutdown /o /r
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
 
 Referencias y Enlaces
----------------------
+=====================
 
 -   Desactivar el Windows Update:
     <https://4sysops.com/archives/disable-windows-10-update-in-the-registry-and-with-powershell/>
 
 -   <https://www.windows-commandline.com/disable-automatic-updates-command-line/>
     https://support.ca.com/cadocs/0/CA%20ARCserve%20Replication%20and%20High%20Availability%20r16%205-ENU/Bookshelf_Files/HTML/VMS/index.htm?toc.htm?2069258.html
+
+### Comandos Powershell para Gestión de Discos
+
+https://msdn.microsoft.com/es-es/library/jj822938(v=ws.11).asp
+
+ 
+
+### Espacios de almacenamiento
+
+https://docs.microsoft.com/en-us/powershell/module/storage/new-virtualdisk?view=win10-ps
