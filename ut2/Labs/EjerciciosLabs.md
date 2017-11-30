@@ -956,15 +956,15 @@ Powershell para gestión de discos
 
  
 
-| **Comando**     | **Descripción** | **Parámetros Adicionales** |
-|-----------------|-----------------|----------------------------|
-| Get-Disk        |                 | \-FriendlyName             |
-| Clear-Disk      |                 |                            |
-| Initialize-Disk |                 |                            |
-| Set-Disk        |                 |                            |
-| Get-Volume      |                 |                            |
-| Format-Volume   |                 |                            |
-| Get-Partition   |                 |                            |
+| **Comando**     | **Descripción**                                                                                                                     | **Parámetros Adicionales**                                                                                                                                                                             |
+|-----------------|-------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Get-Disk        | Devuelve uno o más discos del sistema operativo (diferente a Get-PhysicalDisk)                                                      | \-FriendlyName                                                -Number                                                                                                                                  |
+| Clear-Disk      | Limipa el disco eliminando toda información de la paritición y volviendo al disco no-inicializado. Borra todos los datos del disco. | \-Number                                                       -RemoveData                                                -FriendelyName                                                               |
+| Initialize-Disk | Inicializa un disco a formato RAW habilitando su uso para ser particionado y formateado                                             | \-PartitionStyle                                                     -VirtualDisk                                                    -FriendelyName                                                    |
+| Set-Disk        | Actualiza los atributos del disco físico                                                                                            | \-PartitionStyle                                                     -IsOffline                                                        -IsReadonly                                                     |
+| Get-Volume      | Obtiene los volúmenes que tiene el sistema                                                                                          | \-DriveLEtter                                                      -DiskImage                                                   -FileSystemLabel                                            -Partition |
+| Format-Volume   | Formatea uno o más volúmenes existentes o un volumen en partición existente. Sistemas de ficheros ReFS, exFAT, FAT32, FAT y NTFS.   | \-DriveLetter                                                   -FileSystem                                                           -FileSystemLabel                                                 |
+| Get-Partition   |                                                                                                                                     | \-Disk                                                            -DriveLetter                                                   -PartitionNumber                                            -Volume   |
 
  
 
@@ -1388,7 +1388,6 @@ Get-StorageJob
 # Eliminamos el disco físico
 
 Remove-PhysicalDisk -UniqueID '{...}'
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
