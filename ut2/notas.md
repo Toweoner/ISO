@@ -51,7 +51,8 @@ Enlace para descargar la instancia de la VM Ware
 
  
 
--   Alrededor de 4GB
+-   Alrededor de 4GB está comprimido en zip. Descomprimir con winrar o
+    alternativa.
 
 -   Usuario: vmexameniso
 
