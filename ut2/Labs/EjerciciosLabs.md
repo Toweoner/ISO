@@ -1244,7 +1244,39 @@ PS G:\> Remove-VirtualDisk -FriendlyName virtual1 -Confirm:$false
 Vamos a crear los diferentes storage: Simple, Mirror doble, Mirror Tiple y
 paridad:
 
- 
+-   Para crear dichos espacios se utiliza el siguiene comando con las siguientes
+    opciones:
+
+    1.  Se utiliza el comando `New-VirtualDisk`, con las opciones
+        `StoragePoolFriendlyName` para pasarle el nombre del Storage Pool
+        Creado.
+
+    2.  Se le pasa también el `FriendlyName` para darle nombre al Disco Virtual
+        que se formará en el storage pool.
+
+    3.  Con `Size` pondremos el espacio deseado que se puede calcular de todos
+        los discos.
+
+    4.  Con `ResiliencySettingName` pondremos Simple, Mirror o Parity,
+        dependiendo qué organización necesitemos en los discos. Esta explicación
+        está dada más arriba.
+
+    5.  La opción `ProvisionType` tiene como alternativas Thin y Fixed. Esto
+        atañe a los discos virtuales. Thin para tamaño de disco que va a
+        amentando conforme se utiliza o fijo en caso de Fixed.
+
+    6.  Tanto en el reflejo doble como en el tripe, se utiliza el parámetro
+        `NumberOfColumns` y según en qué caso, se utiliza el valor 2 y 3,
+        respectivamente con reflejo doble y triple.
+
+    7.  Para la paridad se utiliza la opción `PhysicalDiskRedundancy` con el
+        tamaño de paridad 2. Aunque podemos tener mayores redundancias según los
+        discos que tengas.
+
+    En lo siguiente se muestran los comandos para creación de Espacios de
+    almacenamiento simples, con mirror doble y triple y paridad:
+
+     
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Simple
@@ -1286,11 +1318,13 @@ PS G:\> New-VirtualDisk -StoragePoolFriendlyName LUN-1tb -FriendlyName virtual1 
 
  
 
-===== Esta parte está pendiente de que se pueda impartir ======
+===== Esta parte es OPCIONAL ======
 
  
 
 -   Para añadir un disco físico al storage pool mediante friendly name
+
+ 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 PS C:\> $PDToAdd = Get-PhysicalDisk -FriendlyName PhysicalDisk5
@@ -1343,7 +1377,7 @@ Get-Virtual-Disk
 
 Set-PhysicalDisk -UniqueID '{...}' -Usage Retired
 
-# Reaparamos el disco virtual para que reestructure el resto
+# Reparamos el disco virtual para que reestructure el resto
 
 Repair-VirtualDisk -FriendlyName 'My Virtual Disk'
 
@@ -1359,9 +1393,11 @@ Remove-PhysicalDisk -UniqueID '{...}'
 
  
 
-=======================================================================
+=======================FIN OPCIONAL=================================
 
  
+
+### Inicialización, Particionado y Formato de Volúmenes
 
  
 
@@ -1374,13 +1410,15 @@ Remove-PhysicalDisk -UniqueID '{...}'
  
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Ver la información del disco virtual
+
 PS C:\Windows\system32> Get-VirtualDisk
 
 FriendlyName ResiliencySettingName OperationalStatus HealthStatus IsManualAttach  Size
 ------------ --------------------- ----------------- ------------ --------------  ----
 virtual1     Simple                OK                Healthy      False          54 GB
 
-
+# Ver la información de los discos disponibles de sistema
 
 PS C:\Windows\system32> Get-Disk
 
@@ -1390,6 +1428,7 @@ Number Friendly Name               Serial Number                    HealthStatus
 7      virtual1                    {785d1a8a-f04d-4ac4-adda-be88... Healthy              Online                      54 GB GPT       
 
 
+# Crear la partición
 
 PS C:\Windows\system32> New-Partition -DiskNumber 7 -DriveLetter N -UseMaximumSize 
 
@@ -1398,7 +1437,11 @@ PS C:\Windows\system32> New-Partition -DiskNumber 7 -DriveLetter N -UseMaximumSi
 
 PartitionNumber  DriveLetter Offset                                               Size Type                                          
 ---------------  ----------- ------                                               ---- ----                                          
-2                N           135266304                                        53.87 GB Basic                                      
+2                N           135266304                                        53.87 GB Basic    
+
+# Formatear
+
+PS N:\> Format-Volume -DriveLetter N -FileSystem NTFS -Confirm:$false                                
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
@@ -1409,6 +1452,8 @@ Reparación de Windows 10
  
 
 ### CHKDSK: Check Disk: Comprueba un disco y muestra un informe de estado.
+
+ 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 CHKDSK [volumen[[ruta]nombre de archivo]]] [/F] [/V] [/R] [/X] [/I] [/C]
@@ -1509,11 +1554,7 @@ shutdown /o /r
 Referencias y Enlaces
 =====================
 
--   Desactivar el Windows Update:
-    <https://4sysops.com/archives/disable-windows-10-update-in-the-registry-and-with-powershell/>
-
--   <https://www.windows-commandline.com/disable-automatic-updates-command-line/>
-    https://support.ca.com/cadocs/0/CA%20ARCserve%20Replication%20and%20High%20Availability%20r16%205-ENU/Bookshelf_Files/HTML/VMS/index.htm?toc.htm?2069258.html
+ 
 
 ### Comandos Powershell para Gestión de Discos
 
