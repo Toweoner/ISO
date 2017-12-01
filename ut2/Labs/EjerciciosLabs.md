@@ -293,7 +293,7 @@ compact vdisk
 
  
 
--   **Ejemplo de compactado y extensión de vdisks:**
+### **Ejemplo de compactado y extensión de vdisks:**
 
  
 
