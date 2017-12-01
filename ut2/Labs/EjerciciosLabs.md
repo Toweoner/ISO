@@ -255,8 +255,6 @@ detach vdisk
 
  
 
- 
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 c:\DiskPart
 diskpart>
@@ -287,6 +285,53 @@ expand vdisk maximum=<size in mb>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 compact vdisk
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+-   Ejemplo de compactado y extensión de vdisks:
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+DISKPART> select vdisk file=c:\prueba2.vhd
+
+DiskPart seleccionó correctamente el archivo de disco virtual.
+
+DISKPART> list vdisk
+
+  Núm. discoV  Núm. disco  Estado                Tipo       Arch.
+  -----------  ----------  --------------------  ---------  -----
+* discoV 0    Disco ---  Agregado              Desconocid  c:\prueba2.vhd
+
+DISKPART> attach vdisk
+
+  100 por ciento completado
+
+DiskPart expuso correctamente el archivo de disco virtual.
+
+
+DISKPART> detach vdisk
+
+DiskPart ocultó correctamente el archivo de disco virtual.
+
+DISKPART> expand vdisk maximum=20000
+
+  100 por ciento completado
+
+DiskPart expandió correctamente el archivo de disco virtual.
+
+DISKPART> compact vdisk
+
+  100 por ciento completado
+
+DiskPart compactó correctamente el archivo de disco virtual.
+
+DISKPART>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### Acciones posteriores para arranque e instalación en vdisk
 
  
 
