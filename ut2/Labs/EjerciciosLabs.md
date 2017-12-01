@@ -40,8 +40,8 @@ Introducción
 
  
 
-Configuración de Hyper-V, VMWare y discos VHD/VHDX
---------------------------------------------------
+Configuración de Hyper-V, VMWare 
+---------------------------------
 
  
 
@@ -105,6 +105,11 @@ Disable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V
  
 
 -   Ahora se está preparado para configurar MVs
+
+ 
+
+Configuración de discos virtuales
+---------------------------------
 
  
 
@@ -288,7 +293,7 @@ compact vdisk
 
  
 
--   Ejemplo de compactado y extensión de vdisks:
+-   **Ejemplo de compactado y extensión de vdisks:**
 
  
 
@@ -625,8 +630,7 @@ partición GPT y viceversa, empleando la herramienta DiskPart.
 
  
 
-Sistemas de Ficheros
---------------------
+### Sistemas de Ficheros
 
  
 
@@ -1013,8 +1017,7 @@ Powershell para gestión de discos
 
  
 
-Espacios de Almacenamiento (RAID)
----------------------------------
+### Espacios de Almacenamiento (RAID)
 
  
 
@@ -1203,6 +1206,8 @@ discos físicos en función de las necesidades del usuario.
 A continuación, seleccione el tipo de resistencia entre las cuatro opciones
 siguientes:
 
+ 
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - Simple (sin resistencia): necesita un disco y copia los datos en él. No se garantiza ninguna tolerancia a fallos. Esta es la opción que deberá tomar para este ejemplo.
 - Reflejo doble: copia los datos en dos discos, garantizando redundancia. Equivalente a RAID 1.
@@ -1210,12 +1215,16 @@ siguientes:
 - Paridad: los datos se copian en al menos tres discos mediante el sistema de paridad. Un disco con fallos mantendrá la redundancia. Este tipo de resistencia es equivalente a RAID 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ 
+
 La característica Espacios de almacenamiento gestiona el número de errores capaz
 de tolerar antes de impedir el acceso a los datos: es el Quórum. El acceso a los
 datos se mantiene operativo mientras el número de discos operativos supere el
 número de discos averiados. Por ejemplo, si el espacio está definido como espejo
 triple y todos los discos del grupo pueden utilizarse, el administrador tendrá
 siempre acceso a los datos aunque dos de los discos estén dañados.
+
+ 
 
 -   A continuación, defina el tamaño del grupo de almacenamiento creado en GB o
     TB. El tamaño presentado por defecto es el del disco externo insertado.
@@ -1227,6 +1236,8 @@ siempre acceso a los datos aunque dos de los discos estén dañados.
 -   Si conectamos un disco físico de un Espacio de almacenamiento a un sistema
     operativo Windows 7, este no podrá gestionar el esquema de particionado de
     la unidad.
+
+ 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Para crear un grupo de almacenamiento empleando el lenguaje PowerShell, introduzca los siguientes comandos:
@@ -1547,7 +1558,11 @@ Los modificadores /I o /C reducen la cantidad de tiempo necesario para ejecutar 
 ciertas comprobaciones en el volumen.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ 
+
 -   Ejemplo de uso:
+
+ 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 chkdsk d: /F /R /X /spotfix   # Escanea la unidad d:, corrige errores, sectores defectuosos, fuera el desmontaje y realiza un chequeo puntual que hace que en NTFS sea rápido el comando
@@ -1556,6 +1571,8 @@ chkdsk d: /F /R /X /spotfix   # Escanea la unidad d:, corrige errores, sectores 
  
 
 ### Desfragmentación
+
+ 
 
 Si queremos desfragramentar la unidad D, debemos hacer lo siguiente:
 
@@ -1568,6 +1585,8 @@ optimize-volume -DriveLetter D -Defrag -Verbose
  
 
 ### Análisis
+
+ 
 
 Si se requiere analizar la unidad D:
 
