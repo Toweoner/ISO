@@ -3,13 +3,13 @@ title: "Gestión de Almacenamiento con Diskpart, Powershell y MMC"
 author: "Authors: Iván J.U."
 ---
 
-[1 Introducción](#Introducción)
-[2 Configuración de discos virtuales](#2 Configuración de discos virtuales)
+[1.Introducción](#Cap1)
+[2.Configuración de Hyper-V en Windows 10](#Cap2)
 
 
  
 
-1 Introducción
+1.Introducción <a id="Cap1" />
 ------------
 
  
@@ -44,7 +44,7 @@ author: "Authors: Iván J.U."
 
  
 
-Configuración de Hyper-V, VMWare
+Configuración de Hyper-V en Windows 10 <a id="Cap2" />
 --------------------------------
 
  
