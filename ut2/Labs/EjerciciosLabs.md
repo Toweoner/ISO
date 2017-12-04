@@ -6,6 +6,13 @@ author: "Authors: Iván J.U."
 
 * [1.Introducción](#Cap1)
 * [2.Configuración de Hyper-V en Windows 10](#Cap2)
+* [3 Configuración de discos virtuales](#Cap3)
+* [4.Modificación del arranque del sistema](#Cap4)
+* [5.Creación de dispositivos de almacenamiento para instalación](#Cap5)
+* [6.Particiones MBR y GPT. Volúmenes](#Cap6)
+* [7.Powershell para gestión de discos](#Cap7)
+* [8.Reparación de Windows 10](#Cap7)
+* [9.Referencias y Enlaces](#Cap8)
 
 
  
@@ -45,7 +52,7 @@ author: "Authors: Iván J.U."
 
  
 
-Configuración de Hyper-V en Windows 10 <a id="Cap2" />
+2.Configuración de Hyper-V en Windows 10 <a id="Cap2" />
 --------------------------------
 
  
@@ -113,7 +120,7 @@ Disable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V
 
  
 
-2 Configuración de discos virtuales
+3 Configuración de discos virtuales <a id="Cap3" />
 ---------------------------------
 
  
@@ -391,7 +398,7 @@ operativo durante el tiempo de arranque, como se muestra
 
  
 
-Modificación del arranque del sistema
+4.Modificación del arranque del sistema
 -------------------------------------
 
  
@@ -501,7 +508,7 @@ bcdedit /default {cbd971bf-b7b8-4885-951a-fa03044f5d71}
 
  
 
-Creación de dispositivos de almacenamiento para instalación
+5.Creación de dispositivos de almacenamiento para instalación
 -----------------------------------------------------------
 
  
@@ -570,7 +577,7 @@ g:\xcopy g:\*.* /s /h /f h:\
 
  
 
-Particiones MBR y GPT. Volúmenes.
+6.Particiones MBR y GPT. Volúmenes
 ---------------------------------
 
  
@@ -1005,7 +1012,7 @@ convert K: /FS:NTFS /X
 
  
 
-Powershell para gestión de discos
+7.Powershell para gestión de discos
 ---------------------------------
 
  
@@ -1512,7 +1519,7 @@ PS N:\> Format-Volume -DriveLetter N -FileSystem NTFS -Confirm:$false
 
  
 
-Reparación de Windows 10
+8.Reparación de Windows 10
 ------------------------
 
  
@@ -1625,7 +1632,7 @@ shutdown /o /r
 
  
 
-Referencias y Enlaces
+10.Referencias y Enlaces
 =====================
 
  
