@@ -3,11 +3,11 @@ title: "Gestión de Almacenamiento con Diskpart, Powershell y MMC"
 author: "Authors: Iván J.U."
 ---
 
- [1. Introducción](#Introducción)
+ [1 Introducción](#Introducción)
 
  
 
-1. Introducción
+1 Introducción
 ------------
 
  
