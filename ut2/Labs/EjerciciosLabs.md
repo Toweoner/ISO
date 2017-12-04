@@ -3,7 +3,9 @@ title: "Gestión de Almacenamiento con Diskpart, Powershell y MMC"
 author: "Authors: Iván J.U."
 ---
 
- [1 Introducción](#Introducción)
+[1 Introducción](#Introducción)
+[2 Configuración de discos virtuales](#2 Configuración de discos virtuales)
+
 
  
 
@@ -110,7 +112,7 @@ Disable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V
 
  
 
-Configuración de discos virtuales
+2 Configuración de discos virtuales
 ---------------------------------
 
  
