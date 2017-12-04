@@ -4,6 +4,7 @@ author: "Authors: Iván J.U."
 ---
 
 [1.Introducción](#Cap1)
+
 [2.Configuración de Hyper-V en Windows 10](#Cap2)
 
 
