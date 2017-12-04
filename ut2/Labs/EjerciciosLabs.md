@@ -50,11 +50,8 @@ author: "Authors: Iván J.U."
 
  
 
- 
-
 2.Configuración de Hyper-V en Windows 10 <a id="Cap2" />
 --------------------------------
-
  
 
 ### Ejercicio 1. Activar la característica Hyper-V
@@ -398,7 +395,7 @@ operativo durante el tiempo de arranque, como se muestra
 
  
 
-4.Modificación del arranque del sistema
+4.Modificación del arranque del sistema <a id="Cap4" />
 -------------------------------------
 
  
@@ -508,7 +505,7 @@ bcdedit /default {cbd971bf-b7b8-4885-951a-fa03044f5d71}
 
  
 
-5.Creación de dispositivos de almacenamiento para instalación
+5.Creación de dispositivos de almacenamiento para instalación <a id="Cap5" />
 -----------------------------------------------------------
 
  
@@ -577,7 +574,7 @@ g:\xcopy g:\*.* /s /h /f h:\
 
  
 
-6.Particiones MBR y GPT. Volúmenes
+6.Particiones MBR y GPT. Volúmenes <a id="Cap6" />
 ---------------------------------
 
  
@@ -1012,7 +1009,7 @@ convert K: /FS:NTFS /X
 
  
 
-7.Powershell para gestión de discos
+7.Powershell para gestión de discos <a id="Cap7" />
 ---------------------------------
 
  
@@ -1519,7 +1516,7 @@ PS N:\> Format-Volume -DriveLetter N -FileSystem NTFS -Confirm:$false
 
  
 
-8.Reparación de Windows 10
+8.Reparación de Windows 10 <a id="Cap8" />
 ------------------------
 
  
@@ -1632,7 +1629,7 @@ shutdown /o /r
 
  
 
-10.Referencias y Enlaces
+9.Referencias y Enlaces <a id="Cap9" />
 =====================
 
  
