@@ -10,7 +10,7 @@ Discos virtuales
 
 2.  Expándelo a 7 GB
 
-3.  Redúcelo a 1GB
+3.  Redúcelo a 1GB **esto es erróneo, no lo podemos hacer. sólo compactar**
 
 4.  Compáctalo
 
